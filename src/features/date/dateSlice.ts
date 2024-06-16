@@ -14,25 +14,28 @@ const dateSlice = createSlice({
 	initialState,
 	reducers: {
 		incrementDay: state => {
-			dayjs(state.value).add(1, 'day').toISOString();
+			state.value = dayjs(state.value).add(1, 'day').toISOString();
 		},
 		incrementWeek: state => {
-			dayjs(state.value).add(1, 'week').toISOString();
+			state.value = dayjs(state.value).add(1, 'week').toISOString();
 		},
 		incrementMonth: state => {
-			dayjs(state.value).add(1, 'month').toISOString();
+			state.value = dayjs(state.value).add(1, 'month').toISOString();
 		},
 		decrementDay: state => {
-			dayjs(state.value).subtract(1, 'day').toISOString();
+			state.value = dayjs(state.value).subtract(1, 'day').toISOString();
 		},
 		decrementWeek: state => {
-			dayjs(state.value).subtract(1, 'week').toISOString();
+			state.value = dayjs(state.value).subtract(1, 'week').toISOString();
 		},
 		decrementMonth: state => {
-			dayjs(state.value).subtract(1, 'month').toISOString();
+			state.value = dayjs(state.value).subtract(1, 'month').toISOString();
 		},
 		selectDate: (state, action: PayloadAction<string>) => {
 			state.value = action.payload;
+		},
+		selectToday: state => {
+			state.value = dayjs().toISOString();
 		},
 	},
 });
@@ -45,5 +48,7 @@ export const {
 	decrementWeek,
 	decrementMonth,
 	selectDate,
+	selectToday,
 } = dateSlice.actions;
+
 export default dateSlice.reducer;

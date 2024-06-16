@@ -1,8 +1,8 @@
 .root {
-	width: fit-content;
 	max-height: 100vh;
-	overflow-y: scroll;
-	width: 300px;
+
+	min-width: 100px;
+	max-width: 300px;
 }
 
 .content {

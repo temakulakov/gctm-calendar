@@ -6,6 +6,7 @@ import localeData from 'dayjs/plugin/localeData';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import { selectDate } from '../../features/date/dateSlice';
+import { selectCurrentDate } from '../../features/date/selectors';
 import { Filters } from './Filters/Filters';
 import styles from './Min.module.scss';
 dayjs.locale('ru');
@@ -13,9 +14,9 @@ dayjs.extend(localeData);
 
 export const Min = () => {
 	const dispatch = useAppDispatch();
-	const currentDate = useAppSelector(state => dayjs(state.date.value));
+	const currentDate = useAppSelector(selectCurrentDate); // Получаем dayjs объект
 
-	const selectCurrentDate = (date: Dayjs) => {
+	const handleDateSelect = (date: Dayjs) => {
 		dispatch(selectDate(date.toISOString()));
 	};
 
@@ -28,7 +29,7 @@ export const Min = () => {
 			<ConfigProvider locale={ruRU}>
 				<Calendar
 					value={currentDate}
-					onSelect={selectCurrentDate}
+					onSelect={handleDateSelect}
 					fullscreen={false}
 				/>
 				<Filters />

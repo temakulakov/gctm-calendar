@@ -6,4 +6,17 @@
 	border-bottom: 1px $border-color solid;
 
 	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	padding-left: 10px;
+}
+
+.left {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	h1 {
+		margin: 0;
+	}
 }
