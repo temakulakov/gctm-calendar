@@ -1,0 +1,9 @@
+@import '../../styles/variables';
+
+.root {
+	height: 48px;
+	width: 100%;
+	border-bottom: 1px $border-color solid;
+
+	display: flex;
+}

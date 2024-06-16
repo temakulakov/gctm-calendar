@@ -1,21 +1,22 @@
-import './App.css';
-import { useAppSelector, useAppDispatch } from './app/hook';
-import { increment, decrement, incrementByAmount } from './features/counter/counterSlice';
+import styles from './App.module.scss';
+import { useAppDispatch, useAppSelector } from './app/hook';
+import { Grid } from './components/Grid/Grid';
+import { Header } from './components/Header/Header';
+import { Min } from './components/Min/Min';
 
 function App() {
-  const counter = useAppSelector(state => state.counter.value);
-  const dispatch = useAppDispatch();
+	const counter = useAppSelector(state => state.counter.value);
+	const dispatch = useAppDispatch();
 
-  return (
-    <div className="App">
-      {counter}
-      <button onClick={() => dispatch(decrement())}>-</button>
-      <button onClick={() => dispatch(increment())}>+</button>
-      <div>
-        <button onClick={() => dispatch(incrementByAmount(5))}>Increment by 5</button>
-      </div>
-    </div>
-  );
+	return (
+		<div className={styles.root}>
+			<div className={styles.content}>
+				<Header />
+				<Grid />
+			</div>
+			<Min />
+		</div>
+	);
 }
 
 export default App;
