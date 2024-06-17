@@ -1,5 +1,6 @@
 import { ConfigProvider } from 'antd';
 // import 'antd/dist/antd.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -11,23 +12,28 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
 );
+
+const queryClient = new QueryClient();
+
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<ConfigProvider
-				theme={{
-					token: {
-						// Seed Token
-						colorPrimary: '#9D2135',
-						borderRadius: 5,
+			<QueryClientProvider client={queryClient}>
+				<ConfigProvider
+					theme={{
+						token: {
+							// Seed Token
+							colorPrimary: '#9D2135',
+							borderRadius: 5,
 
-						// Alias Token
-						// colorBgContainer: '#f6ffed',
-					},
-				}}
-			>
-				<App />
-			</ConfigProvider>
+							// Alias Token
+							// colorBgContainer: '#f6ffed',
+						},
+					}}
+				>
+					<App />
+				</ConfigProvider>
+			</QueryClientProvider>
 		</Provider>
 	</React.StrictMode>
 );

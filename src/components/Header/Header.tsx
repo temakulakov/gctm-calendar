@@ -77,7 +77,6 @@ export const Header = () => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.left}>
-				<h1>{currentDateTitle()}</h1>
 				<Radio.Group onChange={e => changeDate(e.target.value)}>
 					<Radio.Button value='prev' onClick={() => changeDate('prev')}>
 						<LeftOutlined />
@@ -87,6 +86,7 @@ export const Header = () => {
 						<RightOutlined />
 					</Radio.Button>
 				</Radio.Group>
+				<h1>{currentDateTitle()}</h1>
 			</div>
 
 			<Radio.Group onChange={e => dispatch(changeView(e.target.value))}>
