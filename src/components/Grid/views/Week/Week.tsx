@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hook';
+import React, { useRef, useState } from 'react';
+import {
+	useAppDispatch,
+	useAppSelector,
+	useScroll,
+} from '../../../../app/hook';
 import { selectDate } from '../../../../features/date/dateSlice';
 import { changeView } from '../../../../features/view/viewSlice';
 import {
@@ -21,6 +25,15 @@ export const Week: React.FC = () => {
 	const { selectedRooms } = useAppSelector(state => state.filters);
 	const dispatch = useAppDispatch();
 	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+	const gridRef = useRef<HTMLDivElement>(null);
+	const [scrollPixels, setScrollPixels] = useState(0);
+
+	// Вызов useScroll с обновленным значением scrollPixels
+	useScroll(gridRef, scrollPixels);
+
+	const handleScroll = () => {
+		setScrollPixels(100); // Устанавливаем количество пикселей для скроллинга
+	};
 
 	const selectDay = (day: Dayjs) => {
 		dispatch(changeView('day'));
@@ -58,11 +71,12 @@ export const Week: React.FC = () => {
 
 	return (
 		<div className={styles.root}>
+			<button onClick={handleScroll}>Scroll</button>
 			<div className={styles.weekDays}>
 				<div className={styles.line}>
 					{weekDays.map((el, index) => {
 						const day = dayjs(currentDate).startOf('week').add(index, 'day');
-						const isActive = day.isSame(currentDate, 'day');
+						const isActive = day.isSame(dayjs(), 'day');
 						return (
 							<div key={index} className={styles.weekDayContainer}>
 								<div className={styles.weekDay}>{el}</div>
@@ -103,7 +117,7 @@ export const Week: React.FC = () => {
 					})}
 				</div>
 			</div>
-			<div className={styles.grid}>
+			<div className={styles.grid} ref={gridRef}>
 				<div className={styles.timeLine}>
 					<div />
 					{Array.from({ length: 24 }).map((_, index) => {
@@ -122,9 +136,23 @@ export const Week: React.FC = () => {
 						.filter((event: IEvent) =>
 							dayjs(event.dateFrom).isSame(day, 'day')
 						);
-
+					const current = dayjs().isSame(
+						dayjs(currentDate).startOf('week').add(index, 'day'),
+						'day'
+					);
 					return (
 						<div className={styles.cell} key={index}>
+							{current && (
+								<div
+									className={styles.redLine}
+									style={{
+										top:
+											dayjs().diff(dayjs().startOf('day'), 'minute') *
+												($weekHeight / 24 / 60) -
+											18,
+									}}
+								/>
+							)}
 							{dayEvents?.map((event, idx) => {
 								const room = rooms.find(
 									room => Number(room.id) === Number(event.rooms)
