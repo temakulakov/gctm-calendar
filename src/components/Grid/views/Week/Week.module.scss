@@ -76,7 +76,7 @@
 	justify-content: space-around;
 	color: $text-grid;
 	position: fixed;
-	width: calc(100% - 290px - 30px);
+	width: calc(100% - $calendar-width - 30px);
 	padding-left: $timeline-width;
 	background-color: white;
 	z-index: 100;

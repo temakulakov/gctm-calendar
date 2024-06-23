@@ -39,10 +39,13 @@ export const Filters: React.FC = () => {
 		dispatch(toggleRoom(roomId));
 	};
 
+	const defaultActiveKey = builds ? builds.map(build => build.id) : [];
+	defaultActiveKey.push(0); // Добавить ключ для дополнительной панели
+
 	return (
 		<div className={styles.root}>
 			{builds ? (
-				<Collapse ghost>
+				<Collapse ghost defaultActiveKey={defaultActiveKey}>
 					{builds.map(build => (
 						<Panel header={build.title} key={build.id}>
 							{rooms ? (
