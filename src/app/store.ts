@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import dateSlice from '../features/date/dateSlice';
+import filtersSlice from '../features/filters/filtersSlice';
 import viewSlice from '../features/view/viewSlice';
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
 		counter: counterReducer,
 		date: dateSlice,
 		view: viewSlice,
+		filters: filtersSlice,
 	},
 });
 

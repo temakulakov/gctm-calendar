@@ -6,7 +6,9 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hook';
 import {
 	decrementMonth,
 	incrementMonth,
+	selectDate,
 } from '../../../../features/date/dateSlice';
+import { changeView } from '../../../../features/view/viewSlice';
 import {
 	getEvents,
 	getGoogleCalendar,
@@ -22,6 +24,7 @@ const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 export const Month = () => {
 	const dispatch = useAppDispatch();
 	const currentDate = useAppSelector(store => dayjs(store.date.value));
+	const { selectedRooms } = useAppSelector(store => store.filters);
 
 	const { data: events } = useQuery<IEvent[]>({
 		queryKey: ['events', currentDate],
@@ -75,8 +78,9 @@ export const Month = () => {
 
 	useArrowKeys(handleArrowPress);
 
-	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+	const viewMode = useAppSelector(state => state.view.value);
 
+	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 	return (
 		<div className={styles.root}>
 			<div className={styles.weekLine}>
@@ -89,9 +93,11 @@ export const Month = () => {
 			<div className={styles.calendarGrid}>
 				{dates.map((date, index) => {
 					const dayEvents =
-						events?.filter((event: IEvent) =>
-							dayjs(event.dateFrom).isSame(date, 'day')
-						) || [];
+						events
+							?.filter((event: IEvent) => selectedRooms.includes(event.rooms))
+							?.filter((event: IEvent) =>
+								dayjs(event.dateFrom).isSame(date, 'day')
+							) || [];
 
 					const dayHolidays =
 						holidays?.filter((holiday: Holiday) =>
@@ -106,6 +112,10 @@ export const Month = () => {
 							}`}
 						>
 							<div
+								onClick={() => {
+									dispatch(changeView('day'));
+									dispatch(selectDate(date.toISOString()));
+								}}
 								className={`${styles.dateNumber} ${
 									index < 7 ? styles.firstRow : ''
 								}`}
@@ -113,18 +123,19 @@ export const Month = () => {
 								{date.date()}
 							</div>
 
-							{dayHolidays.map((holiday, holidayIndex) => (
-								<div
-									key={`holiday-${holidayIndex}`}
-									className={styles.eventTitle}
-									style={{
-										top: `${20 + holidayIndex * 20}px`,
-										backgroundColor: '#FFD700',
-									}}
-								>
-									{holiday.title}
-								</div>
-							))}
+							{selectedRooms.includes(0) &&
+								dayHolidays.map((holiday, holidayIndex) => (
+									<div
+										key={`holiday-${holidayIndex}`}
+										className={styles.eventTitle}
+										style={{
+											top: `${35 + holidayIndex * 20}px`,
+											backgroundColor: '#FFD700',
+										}}
+									>
+										{holiday.title}
+									</div>
+								))}
 
 							{dayEvents.map((event, eventIndex) => {
 								const room = rooms.find(
@@ -136,7 +147,12 @@ export const Month = () => {
 										key={eventIndex}
 										className={styles.eventTitle}
 										style={{
-											top: `${20 + (dayHolidays.length + eventIndex) * 20}px`,
+											top: `${
+												35 +
+												((selectedRooms.includes(0) ? dayHolidays.length : 0) +
+													eventIndex) *
+													20
+											}px`,
 											backgroundColor: room ? room.color : 'transparent',
 										}}
 										onClick={() => setSelectedEvent(event)}
@@ -151,7 +167,22 @@ export const Month = () => {
 			</div>
 
 			<Modal
-				title={selectedEvent?.title}
+				title={
+					<div style={{ display: 'flex', alignItems: 'center' }}>
+						<div
+							style={{
+								height: '20px',
+								minWidth: '20px',
+								borderRadius: '50%',
+								backgroundColor: rooms.find(
+									room => room.id === selectedEvent?.rooms
+								)?.color,
+								marginRight: '10px',
+							}}
+						/>
+						{selectedEvent?.title}
+					</div>
+				}
 				open={!!selectedEvent}
 				onCancel={() => setSelectedEvent(null)}
 				footer={null}
@@ -159,14 +190,14 @@ export const Month = () => {
 				{selectedEvent && (
 					<div>
 						<p>
-							<strong>Stage ID:</strong> {selectedEvent.stageId}
+							<strong>Стадия:</strong> {selectedEvent.stageId}
 						</p>
 						<p>
 							<strong>Opportunity:</strong> {selectedEvent.opportunity}
 						</p>
 						<p>
 							<strong>Responsible Staff:</strong>{' '}
-							{selectedEvent.responsibleStaffList.join(', ')}
+							{/* {selectedEvent.responsibleStaffList.join(', ')} */}
 						</p>
 						<p>
 							<strong>From:</strong>{' '}

@@ -62,9 +62,9 @@ export const Header = () => {
 			case 'month':
 				return `${Month[currentDate.month()]} ${currentDate.year()}`;
 			case 'week':
-				return `${currentDate.startOf('week').date() + 1} - ${
-					currentDate.endOf('week').date() + 1
-				} ${MonthsOf[currentDate.month()]} ${currentDate.year()}`;
+				return `${currentDate.startOf('week').date()} - ${currentDate
+					.endOf('week')
+					.date()} ${MonthsOf[currentDate.month()]} ${currentDate.year()}`;
 			case 'day':
 				return `${currentDate.date()} ${
 					MonthsOf[currentDate.month()]
@@ -77,7 +77,7 @@ export const Header = () => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.left}>
-				<Radio.Group onChange={e => changeDate(e.target.value)}>
+				<Radio.Group size='small' onChange={e => changeDate(e.target.value)}>
 					<Radio.Button value='prev' onClick={() => changeDate('prev')}>
 						<LeftOutlined />
 					</Radio.Button>
@@ -89,7 +89,10 @@ export const Header = () => {
 				<h1>{currentDateTitle()}</h1>
 			</div>
 
-			<Radio.Group onChange={e => dispatch(changeView(e.target.value))}>
+			<Radio.Group
+				size='small'
+				onChange={e => dispatch(changeView(e.target.value))}
+			>
 				<Radio.Button value='month'>Месяц</Radio.Button>
 				<Radio.Button value='week'>Неделя</Radio.Button>
 				<Radio.Button value='day'>День</Radio.Button>

@@ -29,6 +29,13 @@ root.render(
 							// Alias Token
 							// colorBgContainer: '#f6ffed',
 						},
+						components: {
+							Collapse: {
+								headerPadding: '5px',
+								contentPadding: '0 20px',
+							},
+							Checkbox: {},
+						},
 					}}
 				>
 					<App />

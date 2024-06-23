@@ -1,3 +1,148 @@
+@import '../../../../styles/variables.scss';
+
 .root {
-    
+	display: flex;
+	flex-direction: column;
+}
+
+.line {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.holidaysLine {
+	display: flex;
+	justify-content: space-around;
+
+	& > div {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-right: 1px $border-color solid;
+		padding-bottom: 5px;
+		&:last-child {
+			border: none;
+		}
+	}
+}
+
+.holiday {
+	display: flex;
+	justify-content: start;
+	width: 95%;
+	background-color: #ffd900;
+	color: black;
+	padding: 2px 4px;
+	border-radius: 5px;
+}
+
+.holContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.event {
+	border-radius: 5px;
+	color: white;
+	position: absolute;
+	width: calc(100% - 10px);
+	min-height: fit-content !important;
+	cursor: pointer;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.weekDays {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	color: $text-grid;
+	position: fixed;
+	width: calc(100% - 290px - 30px);
+	padding-left: $timeline-width;
+	background-color: white;
+	z-index: 100;
+	border-top: 1px $border-color solid;
+	border-bottom: 1px $border-color solid;
+}
+
+.weekDayContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.weekDay {
+}
+
+.weekDayNumber {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	cursor: pointer;
+	text-align: center;
+	font-size: 26px;
+	font-weight: 400;
+	transition: all 0.3s ease-out;
+	&:hover {
+		background-color: $text-grid;
+		color: white;
+	}
+}
+
+.active {
+	color: white;
+	background-color: $primary-color;
+	&:hover {
+		color: white;
+		background-color: $primary-color;
+	}
+}
+
+.grid {
+	margin-top: 81px;
+	display: flex;
+	flex: 1 1 auto;
+	height: $week-height;
+	justify-content: space-between;
+	overflow-y: scroll;
+	.cell {
+		height: 100%;
+		flex: 1;
+		position: relative;
+		border-right: 1px $border-color solid;
+		background: repeating-linear-gradient(
+			to bottom,
+			$border-color 0,
+			$border-color 1px,
+			transparent 1px,
+			transparent calc((100% / 24) - 1px)
+		);
+	}
+	.timeLine {
+		min-width: $timeline-width;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		color: black;
+		align-items: center;
+		justify-content: space-between;
+
+		.element {
+			transform: translateY(8px);
+		}
+	}
+
+	.line {
+		height: 1px;
+		width: 100%;
+		background-color: $border-color;
+	}
 }

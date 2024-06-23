@@ -1,5 +1,171 @@
-import styles from './Week.module.scss'
+import { useQuery } from '@tanstack/react-query';
+import dayjs, { Dayjs } from 'dayjs';
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../app/hook';
+import { selectDate } from '../../../../features/date/dateSlice';
+import { changeView } from '../../../../features/view/viewSlice';
+import {
+	getEvents,
+	getGoogleCalendar,
+	getRooms,
+} from '../../../../services/FastApi';
+import { IEvent, Room } from '../../../../types/type';
+import styles from './Week.module.scss';
 
-export const Week = () => {
-    return <div className={styles.root}></div>
-}
+const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
+const $weekHeight = 960;
+
+export const Week: React.FC = () => {
+	const currentDate = dayjs(useAppSelector(state => state.date.value));
+	const { selectedRooms } = useAppSelector(state => state.filters);
+	const dispatch = useAppDispatch();
+	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+
+	const selectDay = (day: Dayjs) => {
+		dispatch(changeView('day'));
+		dispatch(selectDate(day.toISOString()));
+	};
+
+	const {
+		data: holidays,
+		isLoading: isLoadingHolidays,
+		error: errorHolidays,
+	} = useQuery({
+		queryKey: ['google'],
+		queryFn: () =>
+			getGoogleCalendar({
+				googleUrl:
+					'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
+			}),
+	});
+
+	const { data: events } = useQuery<IEvent[]>({
+		queryKey: ['events', currentDate],
+		queryFn: () =>
+			getEvents({
+				dateFrom: currentDate.startOf('month'),
+				dateTo: currentDate.endOf('month'),
+			}),
+		initialData: [],
+	});
+
+	const { data: rooms } = useQuery<Room[]>({
+		queryKey: ['rooms'],
+		queryFn: () => getRooms(),
+		initialData: [],
+	});
+
+	return (
+		<div className={styles.root}>
+			<div className={styles.weekDays}>
+				<div className={styles.line}>
+					{weekDays.map((el, index) => {
+						const day = dayjs(currentDate).startOf('week').add(index, 'day');
+						const isActive = day.isSame(currentDate, 'day');
+						return (
+							<div key={index} className={styles.weekDayContainer}>
+								<div className={styles.weekDay}>{el}</div>
+								<div
+									className={`${styles.weekDayNumber} ${
+										isActive ? styles.active : ''
+									}`}
+									onClick={() => selectDay(day)}
+								>
+									{day.format('D')}
+								</div>
+							</div>
+						);
+					})}
+				</div>
+				<div className={styles.holidaysLine}>
+					{weekDays.map((item, index) => {
+						return (
+							<div className={styles.holContainer} key={index}>
+								{holidays &&
+									holidays
+										.filter(holiday => selectedRooms.includes(0))
+										.filter(holiday =>
+											dayjs(holiday.dateFrom).isSame(
+												dayjs(currentDate).startOf('week').add(index, 'day'),
+												'day'
+											)
+										)
+										.map((item, index) => {
+											return (
+												<div key={index} className={styles.holiday}>
+													{item.title}
+												</div>
+											);
+										})}
+							</div>
+						);
+					})}
+				</div>
+			</div>
+			<div className={styles.grid}>
+				<div className={styles.timeLine}>
+					<div />
+					{Array.from({ length: 24 }).map((_, index) => {
+						return (
+							<span key={index} className={styles.element}>
+								{index + 1}
+							</span>
+						);
+					})}
+					<div />
+				</div>
+				{weekDays.map((el, index) => {
+					const day = dayjs(currentDate).startOf('week').add(index, 'day');
+					const dayEvents = events
+						?.filter((event: IEvent) => selectedRooms.includes(event.rooms))
+						.filter((event: IEvent) =>
+							dayjs(event.dateFrom).isSame(day, 'day')
+						);
+
+					return (
+						<div className={styles.cell} key={index}>
+							{dayEvents?.map((event, idx) => {
+								const room = rooms.find(
+									room => Number(room.id) === Number(event.rooms)
+								);
+								return (
+									<div
+										key={idx}
+										className={styles.event}
+										style={{
+											backgroundColor: room ? room.color : 'transparent',
+											minHeight: 'fit-content',
+											height:
+												event.dateTo.diff(event.dateFrom, 'minute') *
+												($weekHeight / 24 / 60),
+											top: `${
+												event.dateFrom.diff(
+													event.dateFrom.startOf('day'),
+													'minute'
+												) *
+													($weekHeight / 24 / 60) -
+												18
+											}px`,
+										}}
+										onClick={() => setSelectedEvent(event)}
+									>
+										<b>{event.title}</b>
+										<br />
+										{event.dateFrom.format('HH:mm')}-
+										{event.dateTo.format('HH:mm')}
+									</div>
+								);
+							})}
+						</div>
+					);
+				})}
+				<div>
+					{Array.from({ length: 24 }).map((_, index) => (
+						<div key={index} className={styles.line}></div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
+};

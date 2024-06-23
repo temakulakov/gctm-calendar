@@ -2,6 +2,11 @@
 
 import { Dayjs } from 'dayjs';
 
+export interface Build {
+	id: number;
+	title: string;
+}
+
 export interface Room {
 	id: number;
 	color: string;
@@ -62,9 +67,4 @@ export interface Holiday {
 export interface ReportRoom extends Room {
 	hours: number;
 	percents: number;
-}
-
-export interface Build {
-	id: number;
-	title: string;
 }
