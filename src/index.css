@@ -20,6 +20,10 @@ p {
 	margin: 0;
 }
 
+b {
+	font-weight: 500;
+}
+
 .ant-collapse-content-box {
 	padding: 0 10px !important;
 }

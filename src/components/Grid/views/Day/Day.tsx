@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hook';
+
+import {
+	decrementDay,
+	incrementDay,
+} from '../../../../features/date/dateSlice';
 import {
 	getBuilds,
 	getEvents,
@@ -9,7 +15,10 @@ import {
 	getRooms,
 } from '../../../../services/FastApi';
 import { Build, IEvent, Room } from '../../../../types/type';
+import useArrowKeys from '../Month/hooks/useArrowKeys';
 import styles from './Day.module.scss';
+import { Grid } from './Grid/Grid';
+import { Menu } from './Menu/Menu';
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
@@ -47,6 +56,27 @@ export const Day = () => {
 		}
 	}, [builds]);
 
+	const handleArrowPress = (direction: 'left' | 'right' | 'up' | 'down') => {
+		switch (direction) {
+			case 'left':
+				dispatch(decrementDay());
+				break;
+			case 'right':
+				dispatch(incrementDay());
+				break;
+			case 'up':
+				dispatch(incrementDay());
+				break;
+			case 'down':
+				dispatch(decrementDay());
+				break;
+			default:
+				break;
+		}
+	};
+
+	useArrowKeys(handleArrowPress);
+
 	const { data: events } = useQuery<IEvent[]>({
 		queryKey: ['events', currentDate],
 		queryFn: () =>
@@ -59,7 +89,39 @@ export const Day = () => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.content}></div>
+			<AnimatePresence>
+				{holidays && (
+					<motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+						<Menu
+							builds={builds}
+							rooms={rooms}
+							holidays={holidays}
+							active={activeKeys}
+							setActive={setActiveKeys}
+						/>
+					</motion.div>
+				)}
+
+				{holidays && (
+					<motion.div
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						className={styles.content}
+					>
+						<Grid
+							events={events.filter(
+								(event: IEvent) =>
+									event.dateFrom.isSame(currentDate, 'day') ||
+									event.dateTo.isSame(currentDate, 'day')
+							)}
+							builds={builds}
+							rooms={rooms}
+							holidays={holidays}
+							active={activeKeys}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 };

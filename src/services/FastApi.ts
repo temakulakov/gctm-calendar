@@ -47,10 +47,10 @@ export const getGoogleCalendar = async (
 export const getReportDay = async (
 	dateFrom: DateFrom
 ): Promise<ReportRoom[]> => {
-	const response = await api.post<{ data: ReportRoom[] }>(
-		'/report/day',
-		dateFrom
-	);
+	const date = dateFrom.dateFrom.add(1, 'day');
+	const response = await api.post<{ data: ReportRoom[] }>('/report/day', {
+		dateFrom: date,
+	});
 	return response.data.data;
 };
 

@@ -17,6 +17,7 @@ import {
 } from '../../features/date/selectors';
 import { changeView } from '../../features/view/viewSlice';
 import styles from './Header.module.scss';
+import useKeyPress from './hooks/useKeyPress';
 
 export const Header = () => {
 	const currentDate = useAppSelector(selectCurrentDate); // Получаем dayjs объект
@@ -52,7 +53,6 @@ export const Header = () => {
 				dispatch(selectToday());
 				break;
 			default:
-				console.log('default');
 				break;
 		}
 	};
@@ -73,6 +73,11 @@ export const Header = () => {
 				return '';
 		}
 	};
+
+	// Используем хук для обработки нажатий клавиш
+	useKeyPress(['w', 'ц'], () => dispatch(changeView('week')));
+	useKeyPress(['m', 'ь'], () => dispatch(changeView('month')));
+	useKeyPress(['d', 'в'], () => dispatch(changeView('day')));
 
 	return (
 		<div className={styles.root}>

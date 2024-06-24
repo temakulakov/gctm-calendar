@@ -15,7 +15,6 @@ const { Panel } = Collapse;
 export const Filters: React.FC = () => {
 	const dispatch = useDispatch();
 	const { selectedRooms } = useAppSelector(state => state.filters);
-	console.log(selectedRooms);
 
 	const { data: builds, isLoading: isLoadingBuilds } = useQuery({
 		queryKey: ['builds'],

@@ -3,7 +3,6 @@ import ruRU from 'antd/lib/locale/ru_RU';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ru';
 import localeData from 'dayjs/plugin/localeData';
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import { selectDate } from '../../features/date/dateSlice';
 import { selectCurrentDate } from '../../features/date/selectors';
@@ -19,10 +18,6 @@ export const Min = () => {
 	const handleDateSelect = (date: Dayjs) => {
 		dispatch(selectDate(date.toISOString()));
 	};
-
-	React.useEffect(() => {
-		console.log(currentDate.format('DD.MM.YYYY'));
-	}, [currentDate]);
 
 	return (
 		<div className={styles.root}>

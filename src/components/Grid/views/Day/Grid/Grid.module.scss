@@ -1,2 +1,47 @@
+@import '../../../../../styles/variables.scss';
 .root {
+	height: fit-content;
+	height: 100px;
+
+	width: $day-width;
+}
+
+.buildGroup {
+	height: fit-content;
+	overflow-x: hidden;
+}
+
+.roomLine {
+	width: 100%;
+	height: 42px;
+	background-color: rgba(209, 209, 209, 0.332);
+	position: relative;
+	z-index: -1;
+}
+
+.event {
+	height: 80%;
+	width: fit-content;
+	border-radius: 5px;
+	position: absolute;
+	color: white;
+	font-size: 12px;
+	flex-direction: column;
+	display: flex;
+	justify-content: center;
+	cursor: pointer;
+	// align-items: center;
+	padding-left: 3px;
+	p {
+		display: -webkit-box;
+		-webkit-line-clamp: 1; /* Количество строк */
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%; /* Установите нужную ширину */
+		line-height: 1; /* Высота строки */
+		max-height: calc(
+			1.5em * 1
+		); /* Высота строки умноженная на количество строк */
+	}
 }

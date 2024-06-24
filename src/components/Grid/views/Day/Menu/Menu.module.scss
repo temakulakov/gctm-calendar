@@ -1,2 +1,46 @@
+@import '/src/styles/variables.scss';
+
 .root {
+	background-color: white;
+	height: fit-content;
+	min-width: $sections-width;
+	cursor: pointer;
+	margin-top: 20px;
+	z-index: 1000;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	padding: 10px 5px;
+	gap: 10px;
+	border-radius: 5px;
+	user-select: none;
+	justify-content: space-between;
+	// transition: all 0.9s ease;
+	h4 {
+		font-weight: 500;
+		font-size: 14px;
+		align-self: center;
+	}
+}
+.buildLine {
+	display: flex;
+	flex-direction: column;
+}
+.body {
+}
+
+.roomLine {
+	padding: 10px;
+	border-radius: 5px;
+	background-color: white;
+	font-size: 14px;
+
+	display: flex;
+	justify-content: space-between;
+	transition: all 0.5s ease;
+	&:hover {
+		background-color: #e8e8e896;
+	}
 }

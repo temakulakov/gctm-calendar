@@ -1,14 +1,12 @@
 @import '../../../../styles/variables.scss';
 
 .root {
-	width: calc(100vw - $calendar-width);
 	height: fit-content;
 	display: flex;
-	overflow-x: scroll;
-	background-color: red;
+	width: calc(100vw - $calendar-width);
 }
 
 .content {
-	width: 5000px;
-	height: 499px;
+	overflow-x: scroll;
+	width: calc($day-width);
 }

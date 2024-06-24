@@ -165,7 +165,9 @@ export const Week: React.FC = () => {
 											backgroundColor: room ? room.color : 'transparent',
 											minHeight: 'fit-content',
 											height:
-												event.dateTo.diff(event.dateFrom, 'minute') *
+												event.dateTo
+													.date(1)
+													.diff(event.dateFrom.date(1), 'minute') *
 												($weekHeight / 24 / 60),
 											top: `${
 												event.dateFrom.diff(
