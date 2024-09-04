@@ -24,9 +24,32 @@ const transformEventDates = (events: IEvent[]): IEvent[] => {
 	}));
 };
 
+// The getRooms function now calls the specified API and processes the data accordingly
 export const getRooms = async (): Promise<Room[]> => {
-	const response = await api.post<{ data: Room[] }>('/rooms');
-	return response.data.data;
+		const response = await axios.post("https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.element.get.json", {
+		IBLOCK_TYPE_ID: "lists",
+		IBLOCK_ID: "80",
+		SECTION_ID: "0"
+	});
+
+
+
+	const data = response.data;
+
+	if (!data.result) {
+		throw new Error("Unexpected response format");
+	}
+
+
+	const processedItems: Room[] = data.result.map((item: any) => ({
+		id: Number(item.ID),
+		color: item.PROPERTY_315 ? item.PROPERTY_315[Object.keys(item.PROPERTY_315)[0]] : '', // Safely access PROPERTY_315
+		title: item.NAME,
+		section: Number(item.IBLOCK_SECTION_ID),
+		dateFrom: item.PROPERTY_312 ? dayjs(item.PROPERTY_312[Object.keys(item.PROPERTY_312)[0]]) : null, // Safely access PROPERTY_312
+		dateTo: item.PROPERTY_313 ? dayjs(item.PROPERTY_313[Object.keys(item.PROPERTY_313)[0]]) : null, // Safely access PROPERTY_313
+	}));
+	return processedItems;
 };
 
 export const getEvents = async (dateRange: DateRange): Promise<IEvent[]> => {
@@ -55,9 +78,9 @@ export const getReportDay = async (
 };
 
 export const getReportRange = async ({
-	dateFrom,
-	dateTo,
-}: DateRange): Promise<ReportRoom[]> => {
+										 dateFrom,
+										 dateTo,
+									 }: DateRange): Promise<ReportRoom[]> => {
 	const response = await api.post<{ data: ReportRoom[] }>('/report/range', {
 		dateFrom: dateFrom.startOf('day'),
 		dateTo: dateTo.endOf('day'),
@@ -66,6 +89,38 @@ export const getReportRange = async ({
 };
 
 export const getBuilds = async (): Promise<Build[]> => {
-	const response = await api.post<{ data: Build[] }>('/builds');
-	return response.data.data;
+	// Define the URL and parameters for the API request
+	const url = "https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/lists.section.get.json";
+	const params = {
+		IBLOCK_TYPE_ID: "lists",
+		IBLOCK_ID: "80"
+	};
+
+	try {
+		// Make the POST request to the API
+		const response = await axios.post(url, params);
+
+
+
+		// Check if the 'result' field exists in the response data
+		const data = response.data;
+		if (!data.result) {
+			throw new Error("Unexpected response format");
+		}
+
+
+		// Process the response data and map it to the Build type
+		const processedItems: Build[] = data.result.map((item: any) => ({
+			id: Number(item.ID),
+			title: item.NAME
+		}));
+
+		console.log(processedItems);
+
+		// Return the processed items
+		return processedItems;
+	} catch (error) {
+		// Handle any errors that occur during the request
+		throw new Error(`Failed to fetch data from the provided URL: ${error}`);
+	}
 };

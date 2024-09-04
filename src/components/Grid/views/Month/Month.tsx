@@ -49,7 +49,7 @@ export const Month = () => {
 			}),
 	});
 
-	const { data: rooms } = useQuery<Room[]>({
+	const { data: rooms, isLoading } = useQuery<Room[]>({
 		queryKey: ['rooms'],
 		queryFn: () => getRooms(),
 		initialData: [],
@@ -90,6 +90,7 @@ export const Month = () => {
 					</span>
 				))}
 			</div>
+		
 			<div className={styles.calendarGrid}>
 				{dates.map((date, index) => {
 					const dayEvents =
