@@ -130,6 +130,10 @@
 	height: $week-height;
 	justify-content: space-between;
 	overflow-y: scroll;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
 	.cell {
 		height: 100%;
 		flex: 1;
