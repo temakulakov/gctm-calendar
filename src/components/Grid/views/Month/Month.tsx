@@ -35,7 +35,7 @@ export const Month = () => {
 			}),
 		initialData: [],
 	});
-
+	console.log(events)
 	const {
 		data: holidays,
 		isLoading: isLoadingHolidays,
@@ -90,7 +90,7 @@ export const Month = () => {
 					</span>
 				))}
 			</div>
-		
+
 			<div className={styles.calendarGrid}>
 				{dates.map((date, index) => {
 					const dayEvents =
@@ -215,7 +215,7 @@ export const Month = () => {
 							<strong>Duration:</strong> {selectedEvent.duration}
 						</p>
 						<p>
-							<strong>Department:</strong> {selectedEvent.department}
+							{/*<strong>Department:</strong> {selectedEvent.department}*/}
 						</p>
 						<p>
 							<strong>Rooms:</strong> {selectedEvent.rooms}
@@ -234,7 +234,7 @@ export const Month = () => {
 						</p>
 						<p>
 							<strong>Action Places:</strong>{' '}
-							{selectedEvent.actionPlaces.join(', ')}
+							{/*{selectedEvent.actionPlaces.join(', ')}*/}
 						</p>
 						<p>
 							<strong>Technical Support Required:</strong>{' '}

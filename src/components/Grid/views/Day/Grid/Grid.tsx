@@ -48,23 +48,23 @@ export const Grid = ({
 											{events
 												.filter((event: IEvent) => event.rooms === room.id)
 												.map((event: IEvent) => {
-													console.log(
-														'dateFrom',
-														event.dateFrom.date(1).format('DD.MM.YYYY HH:mm')
-													);
-													console.log(
-														'dateTo',
-														event.dateTo.date(1).format('DD.MM.YYYY HH:mm')
-													);
-
-													console.log(1900 / 24 / 60);
-
-													console.log(
-														event.dateTo
-															.date(1)
-															.diff(event.dateFrom.date(1), 'minute') *
-															(1900 / 24 / 60)
-													);
+													// console.log(
+													// 	'dateFrom',
+													// 	event.dateFrom.date(1).format('DD.MM.YYYY HH:mm')
+													// );
+													// console.log(
+													// 	'dateTo',
+													// 	event.dateTo.date(1).format('DD.MM.YYYY HH:mm')
+													// );
+													//
+													// console.log(1900 / 24 / 60);
+													//
+													// console.log(
+													// 	event.dateTo
+													// 		.date(1)
+													// 		.diff(event.dateFrom.date(1), 'minute') *
+													// 		(1900 / 24 / 60)
+													// );
 
 													return (
 														<motion.div

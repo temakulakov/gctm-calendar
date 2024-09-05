@@ -69,13 +69,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, event }) => {
 					<p>To: {event.dateTo.format('DD/MM/YYYY HH:mm')}</p>
 					<p>Type: {event.type}</p>
 					<p>Duration: {event.duration}</p>
-					<p>Department: {event.department}</p>
+					{/*<p>Department: {event.department}</p>*/}
 					<p>Rooms: {event.rooms}</p>
 					<p>Seats Count: {event.seatsCount}</p>
 					<p>Contract Type: {event.contractType}</p>
 					<p>Price: {event.price}</p>
 					<p>Requisites: {event.requisites}</p>
-					<p>Action Places: {event.actionPlaces.join(', ')}</p>
+					{/*<p>Action Places: {event.actionPlaces.join(', ')}</p>*/}
 					<p>Technical Support Required: {event.technicalSupportRequired}</p>
 					<p>Comments: {event.comments}</p>
 					<p>Event Details: {event.eventDetails}</p>

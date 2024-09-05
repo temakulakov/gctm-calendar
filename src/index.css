@@ -31,3 +31,7 @@ b {
 .ant-collapse-header {
 	margin-bottom: 10px;
 }
+
+span {
+	user-select: none !important;
+}
