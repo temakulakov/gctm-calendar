@@ -36,7 +36,7 @@ export const Month = () => {
 				currentDate.endOf('month')),
 		initialData: [],
 	});
-	console.log(events)
+	// console.log(events)
 	// const {
 	// 	data: holidays,
 	// 	isLoading: isLoadingHolidays,

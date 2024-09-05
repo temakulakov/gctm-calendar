@@ -79,7 +79,7 @@ export const Day = () => {
 	return (
 		<div className={styles.root}>
 			<AnimatePresence>
-				{!holidays && (
+				{holidays && (
 					<motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 						<Menu
 							builds={builds}
@@ -91,7 +91,7 @@ export const Day = () => {
 					</motion.div>
 				)}
 
-				{!holidays && (
+				{holidays && (
 					<motion.div
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
