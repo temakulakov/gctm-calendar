@@ -96,6 +96,7 @@ export const Day = () => {
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						className={styles.content}
+
 					>
 						<Grid
 							events={events.filter(
