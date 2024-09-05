@@ -2,11 +2,13 @@ import { motion } from 'framer-motion';
 import { Build, Holiday, IEvent, Room } from '../../../../../types/type';
 import styles from './Grid.module.scss';
 import { TimeLine } from './TimeLine/TimeLine';
+import { useHorizontalScroll } from './utils';
+import {useRef} from "react";
 
 interface GridProps {
 	rooms: Room[];
 	builds: Build[];
-	holidays: Holiday[];
+	holidays?: Holiday[];
 	active: number[];
 	events: IEvent[];
 }
@@ -20,10 +22,11 @@ export const Grid = ({
 	holidays,
 	active,
 }: GridProps) => {
+
 	return (
 		<div>
 			<TimeLine />
-			<div className={styles.root}>
+			<div className={styles.root} >
 				{builds.map(build => {
 					return (
 						<motion.div

@@ -19,6 +19,7 @@ import useArrowKeys from '../Month/hooks/useArrowKeys';
 import styles from './Day.module.scss';
 import { Grid } from './Grid/Grid';
 import { Menu } from './Menu/Menu';
+import {useHorizontalScroll} from "./Grid/utils";
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
@@ -86,26 +87,27 @@ export const Day = () => {
 			}),
 		initialData: [],
 	});
-
+	const scrollRef = useHorizontalScroll();
 	return (
 		<div className={styles.root}>
 			<AnimatePresence>
-				{holidays && (
+				{!holidays && (
 					<motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 						<Menu
 							builds={builds}
 							rooms={rooms}
-							holidays={holidays}
+							// holidays={holidays}
 							active={activeKeys}
 							setActive={setActiveKeys}
 						/>
 					</motion.div>
 				)}
 
-				{holidays && (
+				{!holidays && (
 					<motion.div
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
+						ref={scrollRef}
 						className={styles.content}
 					>
 						<Grid
@@ -116,7 +118,7 @@ export const Day = () => {
 							)}
 							builds={builds}
 							rooms={rooms}
-							holidays={holidays}
+							// holidays={holidays}
 							active={activeKeys}
 						/>
 					</motion.div>

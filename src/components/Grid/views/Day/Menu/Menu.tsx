@@ -12,7 +12,7 @@ import styles from './Menu.module.scss';
 interface MenuProps {
 	rooms: Room[];
 	builds: Build[];
-	holidays: Holiday[];
+	holidays?: Holiday[];
 	active: number[];
 	setActive: React.Dispatch<React.SetStateAction<number[]>>;
 }

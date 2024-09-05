@@ -4,9 +4,54 @@
 	height: fit-content;
 	display: flex;
 	width: calc(100vw - $calendar-width);
+	min-height: fit-content;
 }
 
 .content {
 	overflow-x: scroll;
 	width: calc($day-width);
+	overflow-y: hidden;
+	min-height: fit-content;
+	//padding-bottom: 10px;
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	&::-webkit-scrollbar-button {
+		width: 12px;
+		height: 12px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: #9D2135;
+		border: 0px solid #FFFFFF;
+		border-radius: 5px;
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background: #9D2135;
+	}
+
+	&::-webkit-scrollbar-thumb:active {
+		background: #9D2135;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: #FFFFFF;
+		border: 0px solid #FFFFFF;
+		border-radius: 5px;
+	}
+
+	&::-webkit-scrollbar-track:hover {
+		background: #FFFFFF;
+	}
+
+	&::-webkit-scrollbar-track:active {
+		background: #FFFFFF;
+	}
+
+	&::-webkit-scrollbar-corner {
+		background: transparent;
+	}
 }
