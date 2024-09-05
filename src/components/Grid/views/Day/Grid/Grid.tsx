@@ -4,13 +4,15 @@ import styles from './Grid.module.scss';
 import { TimeLine } from './TimeLine/TimeLine';
 import { useHorizontalScroll } from './utils';
 import {useRef} from "react";
+import {AppEvent} from "../../../../../types/event";
+import {AppRoom} from "../../../../../types/Room";
 
 interface GridProps {
-	rooms: Room[];
-	builds: Build[];
+	rooms: AppRoom[];
+	builds: AppBuild[];
 	holidays?: Holiday[];
 	active: number[];
-	events: IEvent[];
+	events: AppEvent[];
 }
 
 const $dayWidth = 1900;
@@ -49,8 +51,8 @@ export const Grid = ({
 											className={styles.roomLine}
 										>
 											{events
-												.filter((event: IEvent) => event.rooms === room.id)
-												.map((event: IEvent) => {
+												.filter((event: AppEvent) => event.rooms === room.id)
+												.map((event: AppEvent) => {
 													// console.log(
 													// 	'dateFrom',
 													// 	event.dateFrom.date(1).format('DD.MM.YYYY HH:mm')

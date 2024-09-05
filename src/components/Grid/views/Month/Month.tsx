@@ -11,13 +11,15 @@ import {
 import { changeView } from '../../../../features/view/viewSlice';
 import {
 	getEvents,
-	getGoogleCalendar,
+	// getGoogleCalendar,
 	getRooms,
-} from '../../../../services/FastApi';
+} from '../../../../services/bx';
 import { Holiday, IEvent, Room } from '../../../../types/type';
 import styles from './Month.module.scss';
 import useArrowKeys from './hooks/useArrowKeys';
 import { generateCalendarDates } from './utils';
+import {AppEvent} from "../../../../types/event";
+import {holidays} from "../../../../consts";
 
 const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
@@ -26,28 +28,27 @@ export const Month = () => {
 	const currentDate = useAppSelector(store => dayjs(store.date.value));
 	const { selectedRooms } = useAppSelector(store => store.filters);
 
-	const { data: events } = useQuery<IEvent[]>({
+	const { data: events } = useQuery<AppEvent[]>({
 		queryKey: ['events', currentDate],
 		queryFn: () =>
-			getEvents({
-				dateFrom: currentDate.startOf('month'),
-				dateTo: currentDate.endOf('month'),
-			}),
+			getEvents(
+				currentDate.startOf('month'),
+				currentDate.endOf('month')),
 		initialData: [],
 	});
 	console.log(events)
-	const {
-		data: holidays,
-		isLoading: isLoadingHolidays,
-		error: errorHolidays,
-	} = useQuery({
-		queryKey: ['google'],
-		queryFn: () =>
-			getGoogleCalendar({
-				googleUrl:
-					'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
-			}),
-	});
+	// const {
+	// 	data: holidays,
+	// 	isLoading: isLoadingHolidays,
+	// 	error: errorHolidays,
+	// } = useQuery({
+	// 	queryKey: ['google'],
+	// 	queryFn: () =>
+	// 		getGoogleCalendar({
+	// 			googleUrl:
+	// 				'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
+	// 		}),
+	// });
 
 	const { data: rooms, isLoading } = useQuery<Room[]>({
 		queryKey: ['rooms'],
@@ -80,7 +81,7 @@ export const Month = () => {
 
 	const viewMode = useAppSelector(state => state.view.value);
 
-	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+	const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
 	return (
 		<div className={styles.root}>
 			<div className={styles.weekLine}>
@@ -95,8 +96,8 @@ export const Month = () => {
 				{dates.map((date, index) => {
 					const dayEvents =
 						events
-							?.filter((event: IEvent) => selectedRooms.includes(event.rooms))
-							?.filter((event: IEvent) =>
+							?.filter((event: AppEvent) => selectedRooms.includes(event.rooms))
+							?.filter((event: AppEvent) =>
 								dayjs(event.dateFrom).isSame(date, 'day')
 							) || [];
 
@@ -194,75 +195,75 @@ export const Month = () => {
 							<strong>Стадия:</strong> {selectedEvent.stageId}
 						</p>
 						<p>
-							<strong>Opportunity:</strong> {selectedEvent.opportunity}
+							<strong>Цена билета:</strong> {selectedEvent.opportunity}
 						</p>
 						<p>
-							<strong>Responsible Staff:</strong>{' '}
-							{/* {selectedEvent.responsibleStaffList.join(', ')} */}
+							<strong>Ответственные сотрудники:</strong>{' '}
+							 {selectedEvent.responsibleStaffList.join(', ')}
 						</p>
 						<p>
-							<strong>From:</strong>{' '}
+							<strong>Начало события:</strong>{' '}
 							{selectedEvent.dateFrom.format('DD/MM/YYYY HH:mm')}
 						</p>
 						<p>
-							<strong>To:</strong>{' '}
+							<strong>Окончание события:</strong>{' '}
 							{selectedEvent.dateTo.format('DD/MM/YYYY HH:mm')}
 						</p>
 						<p>
-							<strong>Type:</strong> {selectedEvent.type}
+							<strong>Вид мероприятия:</strong> {selectedEvent.type}
 						</p>
 						<p>
-							<strong>Duration:</strong> {selectedEvent.duration}
+							<strong>Продолжительность:</strong> {selectedEvent.duration}
 						</p>
 						<p>
 							{/*<strong>Department:</strong> {selectedEvent.department}*/}
 						</p>
 						<p>
-							<strong>Rooms:</strong> {selectedEvent.rooms}
+							<strong>Зал:</strong> {selectedEvent.rooms}
 						</p>
 						<p>
-							<strong>Seats Count:</strong> {selectedEvent.seatsCount}
+							<strong>Количество мест:</strong> {selectedEvent.seatsCount}
 						</p>
 						<p>
-							<strong>Contract Type:</strong> {selectedEvent.contractType}
+							<strong>Вид договора:</strong> {selectedEvent.contractType}
 						</p>
 						<p>
-							<strong>Price:</strong> {selectedEvent.price}
+							<strong>Цена билета:</strong> {selectedEvent.price}
 						</p>
 						<p>
-							<strong>Requisites:</strong> {selectedEvent.requisites}
+							<strong>Реквизиты:</strong> {selectedEvent.requisites}
 						</p>
 						<p>
 							<strong>Action Places:</strong>{' '}
 							{/*{selectedEvent.actionPlaces.join(', ')}*/}
 						</p>
 						<p>
-							<strong>Technical Support Required:</strong>{' '}
+							<strong>Требуется ли техническая поддержка:</strong>{' '}
 							{selectedEvent.technicalSupportRequired}
 						</p>
 						<p>
-							<strong>Comments:</strong> {selectedEvent.comments}
+							<strong>Комментарии:</strong> {selectedEvent.comments}
 						</p>
 						<p>
-							<strong>Event Details:</strong> {selectedEvent.eventDetails}
+							<strong>Информация о событии:</strong> {selectedEvent.eventDetails}
 						</p>
 						<p>
-							<strong>Contact Full Name:</strong>{' '}
+							<strong>ФИО ответственного:</strong>{' '}
 							{selectedEvent.contactFullName}
 						</p>
 						<p>
 							<strong>Assigned By ID:</strong> {selectedEvent.assignedById}
 						</p>
 						<p>
-							<strong>Created By:</strong> {selectedEvent.createdBy}
+							{/*<strong>Создал:</strong> {selectedEvent.createdBy}*/}
 						</p>
 						<p>
-							<strong>Description:</strong> {selectedEvent.description}
+							<strong>Описание:</strong> {selectedEvent.description}
 						</p>
-						<p>
-							<strong>Tech Support Needs:</strong>{' '}
-							{selectedEvent.techSupportNeeds}
-						</p>
+						{/*<p>*/}
+						{/*	<strong>Tech Support Needs:</strong>{' '}*/}
+						{/*	{selectedEvent.techSupportNeeds}*/}
+						{/*</p>*/}
 					</div>
 				)}
 			</Modal>

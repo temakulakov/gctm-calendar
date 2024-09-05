@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-export const useHorizontalScroll = () => {
+export const useHorizontalScroll = (scrollSpeed = 0.5) => {
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -8,8 +8,8 @@ export const useHorizontalScroll = () => {
             if (scrollRef.current) {
                 event.preventDefault();
                 scrollRef.current.scrollTo({
-                    left: scrollRef.current.scrollLeft + event.deltaY,
-                    behavior: 'smooth', // Плавная прокрутка
+                    left: scrollRef.current.scrollLeft + event.deltaY * scrollSpeed, // уменьшаем шаг скролла
+                    behavior: 'smooth', // плавная прокрутка
                 });
             }
         };
@@ -25,7 +25,7 @@ export const useHorizontalScroll = () => {
                 ref.removeEventListener('wheel', handleWheel);
             }
         };
-    }, []);
+    }, [scrollSpeed]);
 
     return scrollRef;
 };

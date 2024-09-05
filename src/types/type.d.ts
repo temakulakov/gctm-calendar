@@ -106,3 +106,20 @@ export interface ReportRoom extends Room {
 	hours: number;
 	percents: number;
 }
+
+export interface Property  {
+	[key: string]: string;
+}
+
+export interface RoomData {
+	ID: string;
+	IBLOCK_ID: string;
+	NAME: string;
+	IBLOCK_SECTION_ID: string;
+	CREATED_BY: string;
+	BP_PUBLISHED: string;
+	CODE: string | null;
+	PROPERTY_312: Property;
+	PROPERTY_313: Property;
+	PROPERTY_315: Property;
+}

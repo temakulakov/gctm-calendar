@@ -11,15 +11,15 @@ import {
 import {
 	getBuilds,
 	getEvents,
-	getGoogleCalendar,
 	getRooms,
-} from '../../../../services/FastApi';
+} from '../../../../services/bx';
 import { Build, IEvent, Room } from '../../../../types/type';
 import useArrowKeys from '../Month/hooks/useArrowKeys';
 import styles from './Day.module.scss';
 import { Grid } from './Grid/Grid';
 import { Menu } from './Menu/Menu';
-import {useHorizontalScroll} from "./Grid/utils";
+import {holidays} from "../../../../consts";
+import {AppEvent} from "../../../../types/event";
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
@@ -36,18 +36,6 @@ export const Day = () => {
 		initialData: [],
 	});
 
-	const {
-		data: holidays,
-		isLoading: isLoadingHolidays,
-		error: errorHolidays,
-	} = useQuery({
-		queryKey: ['google'],
-		queryFn: () =>
-			getGoogleCalendar({
-				googleUrl:
-					'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
-			}),
-	});
 
 	const dispatch = useAppDispatch();
 
@@ -78,16 +66,16 @@ export const Day = () => {
 
 	useArrowKeys(handleArrowPress);
 
-	const { data: events } = useQuery<IEvent[]>({
+	const { data: events } = useQuery<AppEvent[]>({
 		queryKey: ['events', currentDate],
 		queryFn: () =>
-			getEvents({
-				dateFrom: currentDate.startOf('month'),
-				dateTo: currentDate.endOf('month'),
-			}),
+			getEvents(
+				currentDate.startOf('month'),
+				currentDate.endOf('month'),
+			),
 		initialData: [],
 	});
-	const scrollRef = useHorizontalScroll();
+
 	return (
 		<div className={styles.root}>
 			<AnimatePresence>
@@ -107,18 +95,17 @@ export const Day = () => {
 					<motion.div
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
-						ref={scrollRef}
 						className={styles.content}
 					>
 						<Grid
 							events={events.filter(
-								(event: IEvent) =>
+								(event: AppEvent) =>
 									event.dateFrom.isSame(currentDate, 'day') ||
 									event.dateTo.isSame(currentDate, 'day')
 							)}
 							builds={builds}
 							rooms={rooms}
-							// holidays={holidays}
+							holidays={holidays}
 							active={activeKeys}
 						/>
 					</motion.div>

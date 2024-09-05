@@ -8,13 +8,14 @@ import {
 } from '../../../../app/hook';
 import { selectDate } from '../../../../features/date/dateSlice';
 import { changeView } from '../../../../features/view/viewSlice';
+import {holidays} from "../../../../consts";
 import {
 	getEvents,
-	getGoogleCalendar,
 	getRooms,
-} from '../../../../services/FastApi';
+} from '../../../../services/bx';
 import { IEvent, Room } from '../../../../types/type';
 import styles from './Week.module.scss';
+import {AppEvent} from "../../../../types/event";
 
 const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
@@ -24,7 +25,7 @@ export const Week: React.FC = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
 	const { selectedRooms } = useAppSelector(state => state.filters);
 	const dispatch = useAppDispatch();
-	const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+	const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
 	const gridRef = useRef<HTMLDivElement>(null);
 	const [scrollPixels, setScrollPixels] = useState(0);
 
@@ -40,26 +41,13 @@ export const Week: React.FC = () => {
 		dispatch(selectDate(day.toISOString()));
 	};
 
-	const {
-		data: holidays,
-		isLoading: isLoadingHolidays,
-		error: errorHolidays,
-	} = useQuery({
-		queryKey: ['google'],
-		queryFn: () =>
-			getGoogleCalendar({
-				googleUrl:
-					'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
-			}),
-	});
-
-	const { data: events } = useQuery<IEvent[]>({
+	const { data: events } = useQuery<AppEvent[]>({
 		queryKey: ['events', currentDate],
 		queryFn: () =>
-			getEvents({
-				dateFrom: currentDate.startOf('month'),
-				dateTo: currentDate.endOf('month'),
-			}),
+			getEvents(
+				currentDate.startOf('month'),
+				currentDate.endOf('month'),
+			),
 		initialData: [],
 	});
 
@@ -132,8 +120,8 @@ export const Week: React.FC = () => {
 				{weekDays.map((el, index) => {
 					const day = dayjs(currentDate).startOf('week').add(index, 'day');
 					const dayEvents = events
-						?.filter((event: IEvent) => selectedRooms.includes(event.rooms))
-						.filter((event: IEvent) =>
+						?.filter((event: AppEvent) => selectedRooms.includes(event.rooms))
+						.filter((event: AppEvent) =>
 							dayjs(event.dateFrom).isSame(day, 'day')
 						);
 					const current = dayjs().isSame(

@@ -2,16 +2,19 @@ import { DownOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useAppSelector } from '../../../../../app/hook';
-import { getReportDay } from '../../../../../services/FastApi';
+import { BXProcessedReportDay } from '../../../../../utils/bx.processed';
 import { Build, Holiday, Room } from '../../../../../types/type';
 import { LineLoad } from '../LineLoad/LineLoad';
 import styles from './Menu.module.scss';
+import {dayReport, getEvents, getRooms} from "../../../../../services/bx";
+import {AppEvent} from "../../../../../types/event";
+import {AppRoom, ReportRoom} from "../../../../../types/Room";
 
 interface MenuProps {
-	rooms: Room[];
-	builds: Build[];
+	rooms: AppRoom[];
+	builds: AppBuild[];
 	holidays?: Holiday[];
 	active: number[];
 	setActive: React.Dispatch<React.SetStateAction<number[]>>;
@@ -26,14 +29,24 @@ export const Menu = ({
 }: MenuProps) => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
 
-	const {
-		data: reports,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: [currentDate, 'day-report'],
-		queryFn: () => getReportDay({ dateFrom: currentDate }),
+	const { data: events } = useQuery<AppEvent[]>({
+		queryKey: ['events'],
+		queryFn: () =>
+			getEvents(
+				currentDate.startOf('month'),
+				currentDate.endOf('month'),
+			),
+		initialData: [],
 	});
+
+	const [ reports, setReports ] = useState<ReportRoom[]>([]);
+
+	useEffect(() => {
+		if (rooms && events ) {
+			setReports(dayReport( events, rooms));
+		}
+	}, [rooms, events]);
+
 
 	return (
 		<div className={styles.root} key={0}>

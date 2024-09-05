@@ -7,7 +7,7 @@ import {
 	setAllRooms,
 	toggleRoom,
 } from '../../../features/filters/filtersSlice';
-import { getBuilds, getRooms } from '../../../services/FastApi';
+import { getBuilds, getRooms } from '../../../services/bx';
 import styles from './Filters.module.scss';
 
 const { Panel } = Collapse;
