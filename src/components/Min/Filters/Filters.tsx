@@ -46,7 +46,7 @@ export const Filters: React.FC = () => {
 			{builds ? (
 				<Collapse ghost defaultActiveKey={defaultActiveKey}>
 					{builds.map(build => (
-						<Panel header={build.title} key={build.id}>
+						<Panel header={build.title} key={build.id} style={{marginBottom: 0}} >
 							{rooms ? (
 								rooms
 									.filter(room => room.section === build.id)

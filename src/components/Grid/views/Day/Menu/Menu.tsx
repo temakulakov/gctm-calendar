@@ -8,13 +8,14 @@ import { BXProcessedReportDay } from '../../../../../utils/bx.processed';
 import { Build, Holiday, Room } from '../../../../../types/type';
 import { LineLoad } from '../LineLoad/LineLoad';
 import styles from './Menu.module.scss';
-import {dayReport, getEvents, getRooms} from "../../../../../services/bx";
+import {dayReport, getBuilds, getEvents, getRooms} from "../../../../../services/bx";
 import {AppEvent} from "../../../../../types/event";
 import {AppRoom, ReportRoom} from "../../../../../types/Room";
 
 interface MenuProps {
 	rooms: AppRoom[];
 	builds: AppBuild[];
+	events: AppEvent[];
 	holidays?: Holiday[];
 	active: number[];
 	setActive: React.Dispatch<React.SetStateAction<number[]>>;
@@ -24,28 +25,19 @@ export const Menu = ({
 	rooms,
 	builds,
 	holidays,
+	events,
 	active,
 	setActive,
 }: MenuProps) => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
 
-	const { data: events } = useQuery<AppEvent[]>({
-		queryKey: ['events'],
-		queryFn: () =>
-			getEvents(
-				currentDate.startOf('month'),
-				currentDate.endOf('month'),
-			),
+	const { data: reports } = useQuery<ReportRoom[]>({
+		queryKey: ['report', currentDate.date()],
+		queryFn: () => dayReport(events, rooms),
 		initialData: [],
 	});
 
-	const [ reports, setReports ] = useState<ReportRoom[]>([]);
 
-	useEffect(() => {
-		if (rooms && events ) {
-			setReports(dayReport( events, rooms));
-		}
-	}, [rooms, events]);
 
 
 	return (
@@ -83,7 +75,7 @@ export const Menu = ({
 						/>
 					</motion.div>
 					<AnimatePresence>
-						{active.includes(build.id) && (
+						{reports && (
 							<motion.div
 								initial={{ opacity: 0, height: 0 }}
 								animate={{ opacity: 1, height: 'fit-content' }}

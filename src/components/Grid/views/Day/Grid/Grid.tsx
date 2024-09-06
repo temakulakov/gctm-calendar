@@ -25,6 +25,7 @@ export const Grid = ({
 	active,
 }: GridProps) => {
 
+
 	return (
 		<div>
 			<TimeLine />

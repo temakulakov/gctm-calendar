@@ -48,7 +48,12 @@ export const BXRequestBuilds = {
 
 export const BuildURL = "lists.section.get.json";
 export const RoomURL = "lists.element.get.json";
+
+
 export const EventURL = "crm.deal.list";
+export const EventUpdateURL = "crm.deal.update";
+export const EventAddURL = "crm.deal.add";
+
 export const UserURL = "user.get";
 
 export const BXApiUrl = "https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/";

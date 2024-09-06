@@ -20,6 +20,7 @@ import { Grid } from './Grid/Grid';
 import { Menu } from './Menu/Menu';
 import {holidays} from "../../../../consts";
 import {AppEvent} from "../../../../types/event";
+import {useHorizontalScroll} from "./Grid/utils";
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
@@ -35,6 +36,8 @@ export const Day = () => {
 		queryFn: () => getBuilds(),
 		initialData: [],
 	});
+
+
 
 
 	const dispatch = useAppDispatch();
@@ -75,7 +78,7 @@ export const Day = () => {
 			),
 		initialData: [],
 	});
-
+	const refer = useHorizontalScroll();
 	return (
 		<div className={styles.root}>
 			<AnimatePresence>
@@ -84,7 +87,12 @@ export const Day = () => {
 						<Menu
 							builds={builds}
 							rooms={rooms}
-							// holidays={holidays}
+							events={events.filter(
+								(event: AppEvent) =>
+									event.dateFrom.isSame(currentDate, 'day') ||
+									event.dateTo.isSame(currentDate, 'day')
+							)}
+							holidays={holidays}
 							active={activeKeys}
 							setActive={setActiveKeys}
 						/>
@@ -96,7 +104,7 @@ export const Day = () => {
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						className={styles.content}
-
+						ref={refer}
 					>
 						<Grid
 							events={events.filter(

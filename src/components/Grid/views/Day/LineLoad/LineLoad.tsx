@@ -9,6 +9,19 @@ interface LineProps {
 	data: ReportRoom | null;
 }
 
+const formatTime = (minutes: number): string => {
+	const hours = Math.floor(minutes / 60); // Количество часов
+	const remainingMinutes = minutes % 60; // Оставшиеся минуты
+
+	if (hours > 0 && remainingMinutes > 0) {
+		return `${hours} ч. ${remainingMinutes} мин.`;
+	} else if (hours > 0) {
+		return `${hours} ч.`;
+	} else {
+		return `${remainingMinutes} мин.`;
+	}
+};
+
 export const LineLoad = ({ data }: LineProps) => {
 	if (data)
 		return (
@@ -25,10 +38,10 @@ export const LineLoad = ({ data }: LineProps) => {
 							</b>
 						</p>
 						<p>
-							Время использования: <b>{data.hours}ч.</b>
+							Время использования: <b>{formatTime(data.hours)}</b>
 						</p>
 						<p>
-							Процент использования: <b>{data.percents}%</b>
+							Процент использования: <b>{data.percents.toFixed(1)}%</b>
 						</p>
 					</div>
 				}
