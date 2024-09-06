@@ -32,7 +32,7 @@ export const Menu = ({
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
 
 	const { data: reports } = useQuery<ReportRoom[]>({
-		queryKey: ['report', currentDate.date()],
+		queryKey: ['report', currentDate.date(), events.length],
 		queryFn: () => dayReport(events, rooms),
 		initialData: [],
 	});

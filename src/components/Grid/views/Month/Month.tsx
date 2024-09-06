@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from 'antd';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hook';
 import {
 	decrementMonth,
@@ -10,11 +10,11 @@ import {
 } from '../../../../features/date/dateSlice';
 import { changeView } from '../../../../features/view/viewSlice';
 import {
-	getEvents,
+	getEvents, getFields,
 	// getGoogleCalendar,
 	getRooms,
 } from '../../../../services/bx';
-import { Holiday, IEvent, Room } from '../../../../types/type';
+import {EventType, Holiday, IEvent, Room} from '../../../../types/type';
 import styles from './Month.module.scss';
 import useArrowKeys from './hooks/useArrowKeys';
 import { generateCalendarDates } from './utils';
@@ -36,19 +36,40 @@ export const Month = () => {
 				currentDate.endOf('month')),
 		initialData: [],
 	});
-	// console.log(events)
-	// const {
-	// 	data: holidays,
-	// 	isLoading: isLoadingHolidays,
-	// 	error: errorHolidays,
-	// } = useQuery({
-	// 	queryKey: ['google'],
-	// 	queryFn: () =>
-	// 		getGoogleCalendar({
-	// 			googleUrl:
-	// 				'https://calendar.google.com/calendar/ical/ru.russian%23holiday%40group.v.calendar.google.com/public/basic.ics',
-	// 		}),
-	// });
+
+	const [ typeEvent, setTypeEvent] = useState<EventType[]>();
+	const [ departments, setDepartments] = useState<EventType[]>();
+	const [ rooms_, setRooms] = useState<EventType[]>();
+	const [ contract, setContract] = useState<EventType[]>();
+	const [ publish, setPublish] = useState<EventType[]>();
+	const [ age, setAge ] = useState<EventType[]>();
+
+	const {data: userFields, error} = useQuery({queryKey: ['userFields'], queryFn: getFields});
+
+	useEffect(() => {
+		if (!error && userFields) {
+			userFields.forEach((element, index) => {
+				if (element.id === 129 && element.list) setTypeEvent(element.list);
+				if (element.id === 131 && element.list) setDepartments(element.list);
+				if (element.id === 132 && element.list) setRooms(element.list);
+				if (element.id === 133 && element.list) setContract(element.list);
+				if (element.id === 134 && element.list) setPublish(element.list);
+				if (element.id === 144 && element.list) setAge(element.list);
+			});
+
+		}
+
+
+	}, [userFields]);
+
+	useEffect(() => {
+		console.log(rooms_);
+		console.log(contract);
+		console.log(typeEvent);
+		console.log(departments);
+		console.log(publish);
+		console.log(age);
+	}, [rooms_, contract, typeEvent, departments, publish, age]);
 
 	const { data: rooms, isLoading } = useQuery<Room[]>({
 		queryKey: ['rooms'],
@@ -199,7 +220,11 @@ export const Month = () => {
 						</p>
 						<p>
 							<strong>Ответственные сотрудники:</strong>{' '}
-							 {selectedEvent.responsibleStaffList.join(', ')}
+							 {/*{*/}
+								{/* selectedEvent.responsibleStaffList.map((el) => <div className={styles.userWrapper}>*/}
+								{/*	 <img src={users}/>*/}
+								{/* </div>)*/}
+							 {/*}*/}
 						</p>
 						<p>
 							<strong>Начало события:</strong>{' '}
@@ -221,12 +246,20 @@ export const Month = () => {
 						<p>
 							<strong>Зал:</strong> {selectedEvent.rooms}
 						</p>
+						{
+							rooms_ && <p>
+								<><strong>Зал:</strong> {rooms_.find(item => item.id === Number(selectedEvent.rooms)) ? rooms_.find(item => item.id === Number(selectedEvent.rooms))?.title : 'null'}</>
+							</p>
+						}
 						<p>
 							<strong>Количество мест:</strong> {selectedEvent.seatsCount}
 						</p>
-						<p>
-							<strong>Вид договора:</strong> {selectedEvent.contractType}
-						</p>
+						{
+							contract && <p>
+								<><strong>Вид
+									договора:</strong> {contract.find(item => item.id === Number(selectedEvent.contractType)) ? contract.find(item => item.id === Number(selectedEvent.contractType))?.title : 'null'}</>
+							</p>
+						}
 						<p>
 							<strong>Цена билета:</strong> {selectedEvent.price}
 						</p>
@@ -247,15 +280,17 @@ export const Month = () => {
 						<p>
 							<strong>Информация о событии:</strong> {selectedEvent.eventDetails}
 						</p>
-						<p>
-							<strong>ФИО ответственного:</strong>{' '}
-							{selectedEvent.contactFullName}
-						</p>
+						{
+							selectedEvent.contactFullName !== '' && <p>
+								<strong>ФИО ответственного:</strong>{' '}
+								{selectedEvent.contactFullName}
+							</p>
+						}
 						<p>
 							<strong>Assigned By ID:</strong> {selectedEvent.assignedById}
 						</p>
 						<p>
-							{/*<strong>Создал:</strong> {selectedEvent.createdBy}*/}
+						{/*<strong>Создал:</strong> {selectedEvent.createdBy}*/}
 						</p>
 						<p>
 							<strong>Описание:</strong> {selectedEvent.description}

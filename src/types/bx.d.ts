@@ -6,6 +6,18 @@ interface BXUser {
     SECOND_NAME: string;
 }
 
+interface BXUserField {
+    ID: string;     // ID как число
+    FIELD_NAME: string;  // FIELD_NAME как строка
+    LIST?: ListItemAPI[]; // Массив элементов списка
+}
+
+interface ListItemAPI {
+    ID: string;     // ID как число
+    VALUE: string;  // FIELD_NAME как строка
+}
+
+
 
 interface BXBuild {
     ID: string;

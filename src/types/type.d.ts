@@ -2,6 +2,17 @@
 
 import { Dayjs } from 'dayjs';
 
+interface UserField {
+	id: number;     // ID как число
+	title: string;  // FIELD_NAME как строка
+	list?: EventType[]; // Массив элементов списка
+}
+
+export interface EventType {
+	id: number;
+	title: string;
+}
+
 export interface Build {
 	id: number;
 	title: string;

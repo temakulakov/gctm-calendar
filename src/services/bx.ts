@@ -18,41 +18,19 @@ import {
 } from "../utils/bx.processed";
 import { Dayjs } from "dayjs";
 import {AppRoom, ReportRoom} from "../types/Room";
+import {UserField} from "../types/type";
 
-
-// export const updateEvent = async (event: AppEvent) => {
-//     try {
-//         const dealData = {
-//             TITLE: event.title,
-//             CATEGORY_ID: 1,
-//             // STAGE_ID: 'NEW',
-//             UF_CRM_1714583071: event.responsibleStaffList,
-//             UF_CRM_1725425014: event.dateFrom.format('YYYY-MM-DD HH:mm'),
-//             UF_CRM_1725425039: event.dateTo.format('YYYY-MM-DD HH:mm'),
-//             UF_CRM_1725447833: event.type ? event.type : 0,
-//             UF_CRM_1725461803: event.duration ? event.duration : '',
-//             UF_CRM_1725448176: event.sectionsState ? sectionsState.id : 0,
-//             UF_CRM_1725448271: event.elementState ? elementState.id : 0,
-//             UF_CRM_1725464299: event.places !== '' ? event.places : 0,
-//             UF_CRM_1725448865: event.contract ? event.contract.id : 0,
-//             OPPORTUNITY: event.opportunity !== '' ? event.opportunity : 0,
-//             UF_CRM_1725464394: event.requisites,
-//             UF_CRM_1725450210: event.actionPlaces,
-//             UF_CRM_1725464456: event.comments,
-//             UF_CRM_1725464469: event.techSupportNeeds,
-//             UF_CRM_1725464495: event.contactFullName,
-//             ASSIGNED_BY_ID: 1762,
-//             CREATED_BY: event.selectedUsers[0],
-//             UF_CRM_1725522371: event.description,
-//             UF_CRM_1725522431: event.addTech,
-//             UF_CRM_1725522651: event.age.map((el) => el.id),
-//             UF_CRM_1725535570: event.selectedUsers
-//         };
-//         axios.post(BXApiUrl + EventUpdateURL, )
-//     } catch (e) {
-//         console.error("Ошибка в запросе функции updateEvent:", e);
-//     }
-// }
+export const getFields = async (): Promise<UserField[]> => {
+    const { data } = await axios.get<{ result: BXUserField[] }>('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/crm.deal.userfield.list');
+    return data.result.map(field => ({
+        id: parseInt(field.ID),
+        title: field.FIELD_NAME,
+        list: field.LIST?.map(item => ({
+            id: parseInt(item.ID),
+            title: item.VALUE
+        }))
+    }))
+};
 
 export const dayReport = async (events: AppEvent[], rooms: AppRoom[]): Promise<ReportRoom[]> => {
     const reports = rooms.map((item, index) => {
