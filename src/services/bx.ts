@@ -99,6 +99,7 @@ export const getEvents = async ( dateFrom: Dayjs, dateTo: Dayjs): Promise<AppEve
 
     try {
         const { data } = await axios.post<BXResponce<BXEvent>>(BXApiUrl + EventURL, params);
+        console.log(data)
 
         return BXProcessedEvents(data.result);
     } catch (e) {

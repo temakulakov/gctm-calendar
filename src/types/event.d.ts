@@ -8,19 +8,21 @@ export interface AppEvent {
     responsibleStaffList: number[];
     dateFrom: Dayjs;
     dateTo: Dayjs;
-    type: string;
+    type: number;
     duration: string;
     rooms: number;
     seatsCount: number;
-    contractType: string;
+    contractType: number;
     price: string;
     requisites: string;
     actionPlaces: number;
-    technicalSupportRequired: string;
+    technicalSupportRequired: boolean;
     comments: string;
     eventDetails: string;
     contactFullName: string;
     assignedById: number;
     description: string;
     techSupportNeeds: string;
+    published: number[];
+    ages: number[];
 }

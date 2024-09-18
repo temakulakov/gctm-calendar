@@ -29,7 +29,7 @@ export const BXProcessedUsers = (data: BXUser[]): AppUser[] => {
     const processedUsers: AppUser[] = data.map((item, index) => {
         return {
             id: Number(item.ID),
-            name: `${item.SECOND_NAME} ${item.NAME} ${item.LAST_NAME}`,
+            name: `${item.LAST_NAME} ${item.NAME} ${item.SECOND_NAME}`,
             imageUrl: item.PERSONAL_PHOTO
         };
     });
@@ -64,6 +64,8 @@ export const BXProcessedRooms = (data: BXRoom[]): AppRoom[] => {
 }
 
 export const BXProcessedEvents = (data: BXEvent[]): AppEvent[] => {
+    console.log('data')
+    console.log(data)
     const processedEvents: AppEvent[] = data.map((item, index) => {
         return {
             id: Number(item.ID),
@@ -73,21 +75,24 @@ export const BXProcessedEvents = (data: BXEvent[]): AppEvent[] => {
             responsibleStaffList: item.UF_CRM_1725535570 ? item.UF_CRM_1725535570 : [],
             dateFrom: dayjs(item.UF_CRM_1725425014), // Изменено для правильного поля
             dateTo: dayjs(item.UF_CRM_1725425039), // Изменено для правильного поля
-            type: item.UF_CRM_1725447833 || '', // Дополнение для типа
+            type: Number(item.UF_CRM_1725447833) || 0, // Дополнение для типа
             duration: item.UF_CRM_1725461803 || '', // Дополнение для длительности
             rooms: Number(item.UF_CRM_1725448271) || 0, // Дополнение для комнат
             seatsCount: Number(item.UF_CRM_1725464299) || 0, // Количество мест
-            contractType: item.UF_CRM_1725448865 || '', // Тип контракта
+            contractType: Number(item.UF_CRM_1725448865) || 0, // Тип контракта
             price: item.OPPORTUNITY || '', // Цена
             requisites: item.UF_CRM_1725464394 || '', // Реквизиты
-            actionPlaces: Number(item.UF_CRM_1725448271) , // Места действия
-            technicalSupportRequired: item.UF_CRM_1725522431 || '', // Техническая поддержка
+            actionPlaces: Number(item.UF_CRM_1725448176) , // Места действия
+            technicalSupportRequired: String(item.UF_CRM_1725522651) === '1' ? true : false, // Техническая поддержка
             comments: item.UF_CRM_1725464456 || '', // Комментарии
             eventDetails: item.UF_CRM_1725522371 || '', // Детали события
             contactFullName: item.UF_CRM_1725464495 || '', // Полное имя контакта
             assignedById: Number(item.ASSIGNED_BY_ID) || 0, // Ответственный сотрудник
             description: item.UF_CRM_1725522371 || '', // Описание события
-            techSupportNeeds: item.UF_CRM_1725522431 || '' // Потребности в техподдержке
+            techSupportNeeds: item.UF_CRM_1725522431 || '', // Потребности в техподдержке
+            published: item.UF_CRM_1725450210 || [], // Площадки для публикация
+            ages: item.UF_CRM_1725522651 || [], // Возрастной рейтингUF_CRM_1725464426
+
         };
     });
     return processedEvents;

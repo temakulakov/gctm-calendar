@@ -8,6 +8,7 @@ import App from './App';
 import { store } from './app/store';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import {ModalProvider} from "./contexts/ModalContext";
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -38,7 +39,9 @@ root.render(
 						},
 					}}
 				>
-					<App />
+					<ModalProvider>
+						<App />
+					</ModalProvider>
 				</ConfigProvider>
 			</QueryClientProvider>
 		</Provider>
