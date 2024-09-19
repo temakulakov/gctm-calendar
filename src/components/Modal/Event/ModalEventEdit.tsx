@@ -3,8 +3,8 @@ import {Modal, Form, Input, Button, Avatar, Select, InputNumber, Checkbox, Row, 
 import { useModalContext } from '../../../contexts/ModalContext';
 import { AppEvent } from "../../../types/event";
 import dayjs, { Dayjs } from "dayjs";
-import { useQuery } from "@tanstack/react-query";
-import {getBuilds, getFields, getRooms, getUsers} from "../../../services/bx";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {getBuilds, getFields, getRooms, getUsers, updateEvent} from "../../../services/bx";
 import { DatePicker } from 'antd';
 import { EventType } from "../../../types/type";
 import {AppRoom} from "../../../types/Room";
@@ -43,7 +43,51 @@ const ModalEventEdit = () => {
     const { data: roomsData, isLoading: isLoadingRoomsData } = useQuery({queryKey: ['rooms'], queryFn: () => getRooms()});
     const { data: buildsData, isLoading: isLoadingBuildsData } = useQuery({queryKey: ['builds'], queryFn: () => getBuilds()});
 
-    console.log(roomsData)
+    console.log(roomsData);
+
+    const useUpdateEventMutation = () => {
+        const queryClient = useQueryClient();
+
+        return useMutation(updateEvent, {
+            onSuccess: () => {
+                // Обновляем кеш событий или других данных после успешного обновления
+                queryClient.invalidateQueries(['events']);
+            },
+            onError: (error) => {
+                console.error('Ошибка при обновлении события:', error);
+            },
+        });
+    };
+    const { mutate: updateEventMutate, isLoading: isUpdating } = useUpdateEventMutation();
+
+    const handleSaveEvent = () => {
+        form.validateFields().then(values => {
+            const updatedEvent: AppEvent = {
+                ...event,
+                ...values,
+                dateFrom: dates[0],
+                dateTo: dates[1],
+                responsibleStaffList: selectedIds,
+                contractType: contract_,
+                rooms,
+                actionPlaces: build,
+                seatsCount,
+                published: publish,
+                ages: age,
+                techSupportNeeds,
+                technicalSupportRequired,
+            };
+
+            // Вызываем мутацию для обновления события
+            updateEventMutate(updatedEvent, {
+                onSuccess: () => {
+                    closeModal();
+                },
+            });
+        }).catch(info => {
+            console.log('Ошибка при валидации:', info);
+        });
+    };
 
     useEffect(() => {
         if (event) {
@@ -140,7 +184,7 @@ const ModalEventEdit = () => {
                 <Button key="cancel" onClick={closeModal}>
                     Отмена
                 </Button>,
-                <Button key="submit" type="primary" onClick={handleSave}>
+                <Button key="submit" type="primary"  onClick={handleSaveEvent}>
                     Сохранить
                 </Button>,
             ]}
