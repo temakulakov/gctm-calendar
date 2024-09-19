@@ -114,6 +114,7 @@ const ModalEventEdit = () => {
         setType(value); // Обновляем ID выбранного контракта
     };
 
+
     const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null, dateStrings: [string, string]) => {
         if (dates) {
             setDates(dates); // Устанавливаем выбранные даты
@@ -147,21 +148,24 @@ const ModalEventEdit = () => {
             <Form form={form} layout="vertical" initialValues={event} variant={'filled'}>
                 <Row gutter={24} >
                     <Col span={12} style={{justifyContent: 'space-between'}}>
-                        <Form.Item name="title" label="Название мероприятия"   rules={[{ required: true, message: 'Введите заголовок' }]}>
+                        <Form.Item  label="Название мероприятия"   rules={[{ required: true, message: 'Введите заголовок' }]}>
                             <Input placeholder="Введите заголовок события" value={title} onChange={(e) => setTitle(e.target.value)} />
                         </Form.Item>
-                        {/*Время мероприятия*/}
+                        <Form.Item  label="Время проведения" rules={[{ required: true, message: 'Введите реквизиты' }]}>
                         <RangePicker
                             placeholder={['Начало мероприятия', 'Окончание мероприятия']}
                             onChange={handleDateChange}
                             showTime
+                            style={{ width: '100%' }}
                             variant={'filled'}
                             value={dates || [null, null]} // Устанавливаем значение для контролируемого компонента
                         />
-                <Row style={{justifyContent: 'space-between', alignItems: 'center', margin: '10px 0'}}>
+                        </Form.Item>
+                <Row style={{justifyContent: 'space-between'}}>
+                    <Form.Item  label="Ответственные сотрудники" rules={[{ required: true, message: 'Введите реквизиты' }]} style={{ width: '60%' }}>
                     <Select
                         placeholder="Выберите сотрудников"
-                        style={{ width: '70%' }}
+
                         value={selectedIds}
                         onChange={setSelectedIds} // Обрабатываем изменения
                         optionFilterProp="children"
@@ -179,10 +183,12 @@ const ModalEventEdit = () => {
                             </Select.Option>
                         ))}
                     </Select>
+                    </Form.Item>
+                    <Form.Item  label="Возрастной рейтинг" rules={[{ required: true, message: 'Введите реквизиты' }]} style={{ width: '35%' }}>
                     <Select
                         mode={'multiple'}
                         placeholder="Возрастной рейтинг"
-                        style={{ width: '20%', height: 'fit-content' }}
+
                         value={age} // Отображаем выбранный ID
                         onChange={(e) => setAge(e)} // Обрабатываем изменения и сохраняем ID
 
@@ -193,16 +199,17 @@ const ModalEventEdit = () => {
                             </Select.Option>
                         ))}
                     </Select>
+                    </Form.Item>
 
                 </Row>
                         <Row style={{justifyContent: 'space-between', alignItems: 'center', margin: '10px 0'}}>
 
 
 
-
+                            <Form.Item  label="Используемый зал" rules={[{ required: true, message: 'Введите реквизиты' }]} style={{ width: '48%' }}>
                         <Select
                             placeholder="Выберите зал"
-                            style={{ width: '48%' }}
+
                             value={rooms}
                             onChange={setRooms} // Обрабатываем изменения
                             optionFilterProp="children"
@@ -215,14 +222,16 @@ const ModalEventEdit = () => {
                         >
                             {roomsType && roomsType.filter(el => el.section === build).map(employee => (
                                 <Select.Option key={employee.id} value={employee.id} title={employee.title} >
-                                    <Avatar style={{  backgroundColor: employee.color, height: 20, width: 20, marginRight: 5}} />
+                                    <Avatar style={{  backgroundColor: employee.color, height: 17, width: 17, marginRight: 5, marginBottom: 4}} />
                                     {employee.title}
                                 </Select.Option>
                             ))}
                         </Select>
+                            </Form.Item>
+                            <Form.Item  label="Используемый филиал" rules={[{ required: true, message: 'Введите реквизиты' }]} style={{ width: '48%' }}>
                         <Select
                             placeholder="Выберите филиал"
-                            style={{ width: '48%' }}
+
                             value={build}
                             onChange={setBuild} // Обрабатываем изменения
                             optionFilterProp="children"
@@ -238,6 +247,7 @@ const ModalEventEdit = () => {
                                 </Select.Option>
                             ))}
                         </Select>
+                            </Form.Item>
 
                         </Row>
 
@@ -246,25 +256,23 @@ const ModalEventEdit = () => {
 
 
 
-                        <Form.Item name="description" label="Описание">
+                        <Form.Item  label="Описание">
                             <Input.TextArea variant={'filled'} placeholder="Введите описание события" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
 
-                <InputNumber value={seatsCount} onChange={(e) => {
-                    if (e) setSeatsCount(e);
-                }}/>
 
 
 
 
 
 
+                        <Form.Item  label="Публикации для площадок"   rules={[{ required: true, message: 'Введите заголовок' }]}>
                         <Select
                             mode={'multiple'}
                             placeholder="Площадки для публикация"
-                            style={{ width: '50%' }}
+                            style={{ width: '100%' }}
                             value={publish} // Отображаем выбранный ID
                             onChange={(e) => setPublish(e)} // Обрабатываем изменения и сохраняем ID
                         >
@@ -274,40 +282,12 @@ const ModalEventEdit = () => {
                                 </Select.Option>
                             ))}
                         </Select>
+                        </Form.Item>
+                        <Row style={{  alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Form.Item  label="Тип договора"   rules={[{ required: true, message: 'Введите заголовок' }]} style={{ width: '60%' }}>
                         <Select
-                            placeholder="Тип события"
-                            style={{ width: '50%' }}
-                            value={type} // Отображаем выбранный ID
-                            onChange={handleChangeType} // Обрабатываем изменения и сохраняем ID
-                        >
-                            {typeEvent && typeEvent.map(item => (
-                                <Select.Option key={item.id} value={item.id} title={item.title}>
-                                    {item.title}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                <Form.Item name="requisites" label="Реквизиты"   rules={[{ required: true, message: 'Введите реквизиты' }]}>
-                    <Input placeholder="Введите реквизиты события" value={requisites} onChange={(e) => setRequisites(e.target.value)} />
-                </Form.Item>
-                <Form.Item name="comments" label="Комментарии" rules={[{ required: true, message: 'Введите реквизиты' }]}>
-                    <Input placeholder="Введите реквизиты события" value={comments} onChange={(e) => setComments(e.target.value)} />
-                </Form.Item>
-                        <Select
-                            placeholder="Тип события"
-                            style={{ width: '50%' }}
-                            value={type} // Отображаем выбранный ID
-                            onChange={handleChangeType} // Обрабатываем изменения и сохраняем ID
-                        >
-                            {typeEvent && typeEvent.map(item => (
-                                <Select.Option key={item.id} value={item.id} title={item.title}>
-                                    {item.title}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                        <Select
-                            variant={'borderless'}
                             placeholder="Тип договора"
-                            style={{ width: '50%' }}
+
                             value={contract_} // Отображаем выбранный ID
                             onChange={handleChangeContract} // Обрабатываем изменения и сохраняем ID
                         >
@@ -317,13 +297,38 @@ const ModalEventEdit = () => {
                                 </Select.Option>
                             ))}
                         </Select>
-                <Form.Item name="tp" label="Требуется ли техническое сопровождение" rules={[{ required: true, message: 'Требуется ли техническое сопровождение' }]}>
-                    <Checkbox title={"Требуется ли техническое сопровождение"} value={technicalSupportRequired} onChange={(e) => setTechnicalSupportRequired(!technicalSupportRequired)} >{"Требуется ли техническое сопровождение"} </Checkbox>
+                        </Form.Item>
+                            <Form.Item  label="Количество мест"   rules={[{ required: true, message: 'Введите заголовок' }]} style={{ width: '30%' }}>
+                                <InputNumber style={{ width: '100%'}} value={seatsCount} onChange={(e) => {
+                                    if (e) setSeatsCount(e);
+                                }}/>
+                            </Form.Item>
+                        </Row>
+                        <Form.Item label="Реквизиты"   rules={[{ required: true, message: 'Введите реквизиты' }]}>
+                            <Input.TextArea placeholder="Введите реквизиты события" value={requisites} onChange={(e) => setRequisites(e.target.value)} />
+                        </Form.Item>
+                <Form.Item  label="Комментарии" rules={[{ required: true, message: 'Введите реквизиты' }]}>
+                    <Input.TextArea placeholder="Введите реквизиты события" value={comments} onChange={(e) => setComments(e.target.value)} />
                 </Form.Item>
+                        <Select
+                            placeholder="Тип события"
+                            style={{ width: '50%' }}
+                            value={type} // Отображаем выбранный ID
+                            onChange={handleChangeType} // Обрабатываем изменения и сохраняем ID
+                        >
+                            {typeEvent && typeEvent.map(item => (
+                                <Select.Option key={item.id} value={item.id} title={item.title}>
+                                    {item.title}
+                                </Select.Option>
+                            ))}
+                        </Select>
+
+
+                    <Checkbox title={"Требуется ли техническое сопровождение"} value={technicalSupportRequired} onChange={(e) => setTechnicalSupportRequired(!technicalSupportRequired)} style={{ margin: '10px 0'}}>{"Требуется ли техническое сопровождение"} </Checkbox>
 
                 {
-                    technicalSupportRequired && <Form.Item name="technicalSupport" label="Комментарии" rules={[{ required: true, message: 'Что требуется от технической поддержки' }]}>
-                        <Input placeholder="Что требуется от технической поддержки" value={techSupportNeeds} onChange={(e) => setTechSupportNeeds(e.target.value)} />
+                    technicalSupportRequired && <Form.Item label="Что требуется от технической поддержки" rules={[{ required: true, message: 'Что требуется от технической поддержки' }]}>
+                        <Input.TextArea placeholder="Что требуется от технической поддержки" value={techSupportNeeds} onChange={(e) => setTechSupportNeeds(e.target.value)} />
                     </Form.Item>
                 }
                     </Col>
