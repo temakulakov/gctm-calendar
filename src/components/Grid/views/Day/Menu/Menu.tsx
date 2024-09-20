@@ -11,7 +11,7 @@ import styles from './Menu.module.scss';
 import {dayReport, getBuilds, getEvents, getRooms} from "../../../../../services/bx";
 import {AppEvent} from "../../../../../types/event";
 import {AppRoom, ReportRoom} from "../../../../../types/Room";
-import { v4 as uuid } from 'uuid'
+
 interface MenuProps {
 	rooms: AppRoom[];
 	builds: AppBuild[];
@@ -75,7 +75,7 @@ export const Menu = ({
 						/>
 					</motion.div>
 					<AnimatePresence>
-						{reports && (
+						{active.includes(build.id) && reports && (
 							<motion.div
 								initial={{ opacity: 0, height: 0 }}
 								animate={{ opacity: 1, height: 'fit-content' }}
@@ -85,7 +85,7 @@ export const Menu = ({
 								{rooms
 									.filter(room => room.section === build.id)
 									.map(room => (
-										<div className={styles.roomLine} key={uuid()}>
+										<div className={styles.roomLine} key={room.id}>
 											{room.title}
 
 											<LineLoad
