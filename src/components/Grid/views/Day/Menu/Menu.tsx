@@ -11,7 +11,7 @@ import styles from './Menu.module.scss';
 import {dayReport, getBuilds, getEvents, getRooms} from "../../../../../services/bx";
 import {AppEvent} from "../../../../../types/event";
 import {AppRoom, ReportRoom} from "../../../../../types/Room";
-
+import { v4 as uuid } from 'uuid'
 interface MenuProps {
 	rooms: AppRoom[];
 	builds: AppBuild[];
@@ -85,7 +85,7 @@ export const Menu = ({
 								{rooms
 									.filter(room => room.section === build.id)
 									.map(room => (
-										<div className={styles.roomLine} key={room.id}>
+										<div className={styles.roomLine} key={uuid()}>
 											{room.title}
 
 											<LineLoad

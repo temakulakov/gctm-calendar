@@ -16,6 +16,8 @@ import {
 import { IEvent, Room } from '../../../../types/type';
 import styles from './Week.module.scss';
 import {AppEvent} from "../../../../types/event";
+import {useModalContext} from "../../../../contexts/ModalContext";
+import EventModal from "../../../Modal/Event/EventModal";
 
 const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
@@ -28,6 +30,8 @@ export const Week: React.FC = () => {
 	const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
 	const gridRef = useRef<HTMLDivElement>(null);
 	const [scrollPixels, setScrollPixels] = useState(0);
+
+	const { openModal } = useModalContext();
 
 	// Вызов useScroll с обновленным значением scrollPixels
 	useScroll(gridRef, scrollPixels);
@@ -129,7 +133,9 @@ export const Week: React.FC = () => {
 						'day'
 					);
 					return (
-						<div className={styles.cell} key={index}>
+						<div className={styles.cell} key={index} onClick={() => {
+							openModal(dayjs(currentDate), true)
+						}}>
 							{current && (
 								<div
 									className={styles.redLine}
@@ -166,7 +172,10 @@ export const Week: React.FC = () => {
 												18
 											}px`,
 										}}
-										onClick={() => setSelectedEvent(event)}
+										onClick={(e) => {
+											e.stopPropagation()
+											openModal(event, true)
+										}}
 									>
 										<b>{event.title}</b>
 										<br />
@@ -184,6 +193,7 @@ export const Week: React.FC = () => {
 					))}
 				</div>
 			</div>
+			<EventModal />
 		</div>
 	);
 };

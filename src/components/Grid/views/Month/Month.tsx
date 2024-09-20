@@ -82,7 +82,7 @@ export const Month = () => {
 	const viewMode = useAppSelector(state => state.view.value);
 
 	const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
-	return (
+	return <>
 		<div className={styles.root}>
 			<div className={styles.weekLine}>
 				{weekDays.map((day, index) => (
@@ -156,7 +156,7 @@ export const Month = () => {
 												35 +
 												((selectedRooms.includes(0) ? dayHolidays.length : 0) +
 													eventIndex) *
-													20
+												20
 											}px`,
 											backgroundColor: room ? room.color : 'transparent',
 										}}
@@ -173,7 +173,8 @@ export const Month = () => {
 					);
 				})}
 			</div>
-			<EventModal />
+
 		</div>
-	);
+		<EventModal/>
+	</>
 };
