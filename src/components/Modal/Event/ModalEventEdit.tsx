@@ -124,7 +124,7 @@ const ModalEventEdit = () => {
                             />
                         </Form.Item>
                         <Row style={{ justifyContent: 'space-between' }}>
-                            <Form.Item label="Ответственные сотрудники" name="responsibleStaffList" rules={[{ required: true, message: 'Выберите сотрудников' }]}>
+                            <Form.Item label="Ответственные сотрудники" name="responsibleStaffList" style={{width: '70%'}} rules={[{ required: true, message: 'Выберите сотрудников' }]}>
                                 <Select mode="multiple" placeholder="Выберите сотрудников">
                                     {users && users.map(employee => (
                                         <Select.Option key={employee.id} value={employee.id} title={employee.name}>
@@ -133,7 +133,7 @@ const ModalEventEdit = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Возрастной рейтинг" name="ages" rules={[{ required: true, message: 'Выберите возрастной рейтинг' }]}>
+                            <Form.Item label="Возраста" style={{width: '25%'}} name="ages" rules={[{ required: true, message: 'Выберите возрастной рейтинг' }]}>
                                 <Select mode="multiple" placeholder="Возрастной рейтинг">
                                     {ageType && ageType.map(item => (
                                         <Select.Option key={item.id} value={item.id} title={item.title}>
@@ -144,7 +144,7 @@ const ModalEventEdit = () => {
                             </Form.Item>
                         </Row>
                         <Row style={{ justifyContent: 'space-between', alignItems: 'center', margin: '10px 0' }}>
-                            <Form.Item label="Используемый зал" name="rooms" rules={[{ required: true, message: 'Выберите зал' }]}>
+                            <Form.Item label="Используемый зал" name="rooms" style={{width: '48%'}} rules={[{ required: true, message: 'Выберите зал' }]}>
                                 <Select placeholder="Выберите зал">
                                     {roomsData && roomsData.map(room => (
                                         <Select.Option key={room.id} value={room.id} title={room.title}>
@@ -154,7 +154,7 @@ const ModalEventEdit = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Используемый филиал" name="actionPlaces" rules={[{ required: true, message: 'Выберите филиал' }]}>
+                            <Form.Item label="Используемый филиал" name="actionPlaces" style={{width: '48%'}} rules={[{ required: true, message: 'Выберите филиал' }]}>
                                 <Select placeholder="Выберите филиал">
                                     {buildsData && buildsData.map(build => (
                                         <Select.Option key={build.id} value={build.id} title={build.title}>
@@ -179,7 +179,7 @@ const ModalEventEdit = () => {
                             </Select>
                         </Form.Item>
                         <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Form.Item label="Тип договора" name="contractType" rules={[{ required: true, message: 'Выберите тип договора' }]}>
+                            <Form.Item label="Тип договора" name="contractType" style={{width: '48%'}}  rules={[{ required: true, message: 'Выберите тип договора' }]}>
                                 <Select placeholder="Тип договора">
                                     {contractType && contractType.map(item => (
                                         <Select.Option key={item.id} value={item.id} title={item.title}>
@@ -188,7 +188,7 @@ const ModalEventEdit = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Количество мест" name="seatsCount" rules={[{ required: true, message: 'Введите количество мест' }]}>
+                            <Form.Item label="Количество мест" name="seatsCount" style={{width: '48%'}}  rules={[{ required: true, message: 'Введите количество мест' }]}>
                                 <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         </Row>
