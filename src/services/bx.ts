@@ -115,7 +115,7 @@ export const updateEvent = async (event: AppEvent):  Promise<AppRoom[]> => {
             id: event.id,
             fields: {
                 TITLE: event.title,
-                UF_CRM_1714583071: event.responsibleStaffList,
+                UF_CRM_1725535570: event.responsibleStaffList,
                 UF_CRM_1725425014: event.dateFrom,
                 UF_CRM_1725425039: event.dateTo,
                 UF_CRM_1725447833: event.type,
@@ -136,7 +136,7 @@ export const updateEvent = async (event: AppEvent):  Promise<AppRoom[]> => {
         });
         return BXProcessedRooms(data.result);
     } catch (e) {
-        console.error("Ошибка в запросе функции getRooms:", e);
+        console.error("Ошибка в запросе функции updateEvent:", e);
         return [];
     };
 }

@@ -83,7 +83,7 @@ export const BXProcessedEvents = (data: BXEvent[]): AppEvent[] => {
             price: item.OPPORTUNITY || '', // Цена
             requisites: item.UF_CRM_1725464394 || '', // Реквизиты
             actionPlaces: Number(item.UF_CRM_1725448176) , // Места действия
-            technicalSupportRequired: String(item.UF_CRM_1725522651) === '1' ? true : false, // Техническая поддержка
+            technicalSupportRequired: String(item.UF_CRM_1725464426) === '1' ? true : false, // Техническая поддержка
             comments: item.UF_CRM_1725464456 || '', // Комментарии
             eventDetails: item.UF_CRM_1725522371 || '', // Детали события
             contactFullName: item.UF_CRM_1725464495 || '', // Полное имя контакта
@@ -91,7 +91,7 @@ export const BXProcessedEvents = (data: BXEvent[]): AppEvent[] => {
             description: item.UF_CRM_1725522371 || '', // Описание события
             techSupportNeeds: item.UF_CRM_1725522431 || '', // Потребности в техподдержке
             published: item.UF_CRM_1725450210 || [], // Площадки для публикация
-            ages: item.UF_CRM_1725522651 || [], // Возрастной рейтингUF_CRM_1725464426
+            ages: item.UF_CRM_1725522651 || [], // Возрастной рейтинг
 
         };
     });

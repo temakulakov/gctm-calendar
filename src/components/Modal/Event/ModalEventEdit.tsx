@@ -47,35 +47,49 @@ const ModalEventEdit = () => {
 
     const useUpdateEventMutation = () => {
         const queryClient = useQueryClient();
+        console.log(event)
 
-        return useMutation(updateEvent, {
+        return useMutation({
+            mutationFn: updateEvent,
             onSuccess: () => {
                 // Обновляем кеш событий или других данных после успешного обновления
-                queryClient.invalidateQueries(['events']);
+                queryClient.invalidateQueries({queryKey: ['events']});
             },
-            onError: (error) => {
+                onError: (error) => {
                 console.error('Ошибка при обновлении события:', error);
             },
+
         });
     };
-    const { mutate: updateEventMutate, isLoading: isUpdating } = useUpdateEventMutation();
+    const { mutate: updateEventMutate, isPending: isUpdating } = useUpdateEventMutation();
 
     const handleSaveEvent = () => {
         form.validateFields().then(values => {
             const updatedEvent: AppEvent = {
-                ...event,
-                ...values,
-                dateFrom: dates[0],
-                dateTo: dates[1],
+                id: event ? event.id : 0,
+                title: title,
+                duration: `${dayjs(dates[1]).diff(dayjs(dates[0]), 'hour')} часов ${dayjs(dates[1]).diff(dayjs(dates[0]), 'minute') % 60} минут`,
+                dateFrom: dates[0] ? dates[0] : dayjs(),
+                dateTo: dates[1] ? dates[1] : dayjs(),
                 responsibleStaffList: selectedIds,
-                contractType: contract_,
+                contractType: contract_ ? contract_ : 0,
                 rooms,
                 actionPlaces: build,
                 seatsCount,
                 published: publish,
                 ages: age,
-                techSupportNeeds,
+                techSupportNeeds: techSupportNeeds ? techSupportNeeds : '',
                 technicalSupportRequired,
+                type: type,
+                comments: comments,
+                requisites: requisites,
+                description,
+                assignedById: event? event.assignedById : 0,
+                contactFullName: event? event.eventDetails : '',
+                eventDetails: event ? event.eventDetails : '',
+                opportunity: event ? event.opportunity : '',
+                stageId: event ? event.stageId : '0',
+                price: event ? event.price : '',
             };
 
             // Вызываем мутацию для обновления события
@@ -105,6 +119,7 @@ const ModalEventEdit = () => {
             setPublish(event.published);
             setComments(event.comments);
             setTechSupportNeeds(event.techSupportNeeds);
+            setTechnicalSupportRequired(event.technicalSupportRequired);
 
 
             console.log(event.requisites)
@@ -368,7 +383,7 @@ const ModalEventEdit = () => {
                         </Select>
 
 
-                    <Checkbox title={"Требуется ли техническое сопровождение"} value={technicalSupportRequired} onChange={(e) => setTechnicalSupportRequired(!technicalSupportRequired)} style={{ margin: '10px 0'}}>{"Требуется ли техническое сопровождение"} </Checkbox>
+                    <Checkbox title={"Требуется ли техническое сопровождение"} checked={technicalSupportRequired} onChange={(e) => setTechnicalSupportRequired(!technicalSupportRequired)} style={{ margin: '10px 0'}}>{"Требуется ли техническое сопровождение"} </Checkbox>
 
                 {
                     technicalSupportRequired && <Form.Item label="Что требуется от технической поддержки" rules={[{ required: true, message: 'Что требуется от технической поддержки' }]}>
