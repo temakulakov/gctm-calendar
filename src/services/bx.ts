@@ -5,7 +5,7 @@ import {
     BXApiUrl,
     BXRequestBuilds,
     BXRequestEventSelect,
-    BXRequestRooms, EventAddURL, EventUpdateURL,
+    BXRequestRooms, EventAddURL, EventDeleteURL, EventUpdateURL,
     EventURL,
     RoomURL, UserURL
 } from "../consts/bx";
@@ -133,6 +133,16 @@ export const createEvent = async (event: Omit<AppEvent, 'id'>):  Promise<AppRoom
                 UF_CRM_1725522651: event.ages
             }
         });
+        return BXProcessedRooms(data.result);
+    } catch (e) {
+        console.error("Ошибка в запросе функции createEvent:", e);
+        return [];
+    };
+}
+
+export const deleteEvent = async (id: Number):  Promise<AppRoom[]> => {
+    try {
+        const { data } = await axios.post<BXResponce<BXRoom>>(BXApiUrl + EventDeleteURL, { id });
         return BXProcessedRooms(data.result);
     } catch (e) {
         console.error("Ошибка в запросе функции createEvent:", e);

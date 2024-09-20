@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, Button, Avatar, Select, InputNumber, Checkbox, Row, Col } from 'antd';
 import { useModalContext } from '../../../contexts/ModalContext';
 import { AppEvent } from "../../../types/event";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getBuilds, getFields, getRooms, getUsers, updateEvent } from "../../../services/bx";
+import { getBuilds, getFields, getRooms, getUsers, updateEvent, deleteEvent } from "../../../services/bx"; // Убедитесь, что deleteEvent импортирован
 import { DatePicker } from 'antd';
 import { EventType } from "../../../types/type";
 import { AppRoom } from "../../../types/Room";
@@ -14,8 +14,8 @@ const { RangePicker } = DatePicker;
 const ModalEventEdit = () => {
     const { event, closeModal } = useModalContext();
     const [form] = Form.useForm();
-
     const queryClient = useQueryClient();
+
     const { mutate: updateEventMutate } = useMutation({
         mutationFn: updateEvent,
         onSuccess: () => {
@@ -24,6 +24,17 @@ const ModalEventEdit = () => {
         },
         onError: (error) => {
             console.error('Ошибка при обновлении события:', error);
+        },
+    });
+
+    const { mutate: deleteEventMutate } = useMutation({
+        mutationFn: deleteEvent,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['events'] });
+            closeModal();
+        },
+        onError: (error) => {
+            console.error('Ошибка при удалении события:', error);
         },
     });
 
@@ -42,9 +53,7 @@ const ModalEventEdit = () => {
             form.setFieldsValue({
                 title: event.title,
                 description: event.description,
-                // dateFrom: event.dateFrom,
-                // dateTo: event.dateTo,
-                dateRange: [dayjs(event.dateFrom), dayjs(event.dateTo)],// Устанавливаем диапазон дат
+                dateRange: [dayjs(event.dateFrom), dayjs(event.dateTo)],
                 responsibleStaffList: event.responsibleStaffList,
                 contractType: event.contractType,
                 rooms: event.rooms,
@@ -77,9 +86,9 @@ const ModalEventEdit = () => {
             const updatedEvent: AppEvent = {
                 id: event ? event.id : 0,
                 ...values,
-                duration: `${dayjs(values.dateTo).diff(dayjs(values.dateFrom), 'hour')} часов ${dayjs(values.dateTo).diff(dayjs(values.dateFrom), 'minute') % 60} минут`,
-                dateFrom: values.dateFrom || dayjs(),
-                dateTo: values.dateTo || dayjs(),
+                duration: `${dayjs(values.dateRange[1]).diff(dayjs(values.dateRange[0]), 'hour')} часов ${dayjs(values.dateRange[1]).diff(dayjs(values.dateRange[0]), 'minute') % 60} минут`,
+                dateFrom: values.dateRange[0] || dayjs(),
+                dateTo: values.dateRange[1] || dayjs(),
                 assignedById: event ? event.assignedById : 0,
                 contactFullName: event ? event.eventDetails : '',
                 eventDetails: event ? event.eventDetails : '',
@@ -94,6 +103,12 @@ const ModalEventEdit = () => {
         });
     };
 
+    const handleDeleteEvent = () => {
+        if (event) {
+            deleteEventMutate(event.id);
+        }
+    };
+
     return (
         <Modal
             width={1000}
@@ -103,6 +118,9 @@ const ModalEventEdit = () => {
             footer={[
                 <Button key="cancel" onClick={closeModal}>
                     Отмена
+                </Button>,
+                <Button key="delete" danger onClick={handleDeleteEvent}>
+                    Удалить
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleSaveEvent}>
                     Сохранить
@@ -119,8 +137,6 @@ const ModalEventEdit = () => {
                             <RangePicker
                                 showTime
                                 style={{ width: '100%' }}
-                                // Устанавливаем начальные значения для диапазона дат
-                                value={form.getFieldValue('dateRange')}
                             />
                         </Form.Item>
                         <Row style={{ justifyContent: 'space-between' }}>
@@ -133,7 +149,7 @@ const ModalEventEdit = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Возраста" style={{width: '25%'}} name="ages" rules={[{ required: true, message: 'Выберите возрастной рейтинг' }]}>
+                            <Form.Item label="Возраст" style={{width: '25%'}} name="ages" rules={[{ required: true, message: 'Выберите возрастной рейтинг' }]}>
                                 <Select mode="multiple" placeholder="Возрастной рейтинг">
                                     {ageType && ageType.map(item => (
                                         <Select.Option key={item.id} value={item.id} title={item.title}>
@@ -179,7 +195,7 @@ const ModalEventEdit = () => {
                             </Select>
                         </Form.Item>
                         <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Form.Item label="Тип договора" name="contractType" style={{width: '48%'}}  rules={[{ required: true, message: 'Выберите тип договора' }]}>
+                            <Form.Item label="Тип договора" name="contractType" style={{width: '48%'}} rules={[{ required: true, message: 'Выберите тип договора' }]}>
                                 <Select placeholder="Тип договора">
                                     {contractType && contractType.map(item => (
                                         <Select.Option key={item.id} value={item.id} title={item.title}>
@@ -188,7 +204,7 @@ const ModalEventEdit = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Form.Item label="Количество мест" name="seatsCount" style={{width: '48%'}}  rules={[{ required: true, message: 'Введите количество мест' }]}>
+                            <Form.Item label="Количество мест" name="seatsCount" style={{width: '48%'}} rules={[{ required: true, message: 'Введите количество мест' }]}>
                                 <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         </Row>

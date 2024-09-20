@@ -54,6 +54,7 @@ export const RoomURL = "lists.element.get.json";
 export const EventURL = "crm.deal.list";
 export const EventUpdateURL = "crm.deal.update";
 export const EventAddURL = "crm.deal.add";
+export const EventDeleteURL = "crm.deal.delete";
 
 export const UserURL = "user.get";
 

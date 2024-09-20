@@ -101,6 +101,7 @@ const ModalEventEdit = () => {
             visible={true}
             onCancel={closeModal}
             footer={[
+
                 <Button key="cancel" onClick={closeModal}>
                     Отмена
                 </Button>,
