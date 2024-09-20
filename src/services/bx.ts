@@ -5,7 +5,7 @@ import {
     BXApiUrl,
     BXRequestBuilds,
     BXRequestEventSelect,
-    BXRequestRooms, EventUpdateURL,
+    BXRequestRooms, EventAddURL, EventUpdateURL,
     EventURL,
     RoomURL, UserURL
 } from "../consts/bx";
@@ -107,6 +107,38 @@ export const getEvents = async ( dateFrom: Dayjs, dateTo: Dayjs): Promise<AppEve
         return [];
     };
 };
+
+export const createEvent = async (event: Omit<AppEvent, 'id'>):  Promise<AppRoom[]> => {
+    try {
+        const { data } = await axios.post<BXResponce<BXRoom>>(BXApiUrl + EventAddURL, {
+            fields: {
+                TITLE: event.title,
+                CATEGORY_ID: 1,
+                UF_CRM_1725535570: event.responsibleStaffList,
+                UF_CRM_1725425014: event.dateFrom,
+                UF_CRM_1725425039: event.dateTo,
+                UF_CRM_1725447833: event.type,
+                UF_CRM_1725461803:`${dayjs(event.dateTo).diff(event.dateFrom, 'hours')} часов ${dayjs(event.dateTo).diff(event.dateFrom, 'minutes') % 60} минут`,
+                UF_CRM_1725448176: event.actionPlaces,
+                UF_CRM_1725448271: event.rooms,
+                UF_CRM_1725464299: event.seatsCount,
+                UF_CRM_1725448865: event.contractType,
+                UF_CRM_1725464394: event.requisites,
+                UF_CRM_1725450210: event.published,
+                UF_CRM_1725464426: event.technicalSupportRequired,
+                UF_CRM_1725464456: event.comments,
+                UF_CRM_1725522431: event.techSupportNeeds,
+                UF_CRM_1725522371: event.description,
+                // UF_CRM_1725522431: event.
+                UF_CRM_1725522651: event.ages
+            }
+        });
+        return BXProcessedRooms(data.result);
+    } catch (e) {
+        console.error("Ошибка в запросе функции createEvent:", e);
+        return [];
+    };
+}
 
 
 export const updateEvent = async (event: AppEvent):  Promise<AppRoom[]> => {
