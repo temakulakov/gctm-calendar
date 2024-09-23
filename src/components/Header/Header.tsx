@@ -18,6 +18,7 @@ import {
 import { changeView } from '../../features/view/viewSlice';
 import styles from './Header.module.scss';
 import useKeyPress from './hooks/useKeyPress';
+import ReportButton from "../Modal/Report/Report";
 
 export const Header = () => {
 	const currentDate = useAppSelector(selectCurrentDate); // Получаем dayjs объект
@@ -82,6 +83,7 @@ export const Header = () => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.left}>
+
 				<Radio.Group size='small' onChange={e => changeDate(e.target.value)}>
 					<Radio.Button value='prev' onClick={() => changeDate('prev')}>
 						<LeftOutlined />
@@ -93,15 +95,18 @@ export const Header = () => {
 				</Radio.Group>
 				<h1>{currentDateTitle()}</h1>
 			</div>
+			<div>
+				<ReportButton/>
 
-			<Radio.Group
-				size='small'
-				onChange={e => dispatch(changeView(e.target.value))}
-			>
-				<Radio.Button value='month'>Месяц</Radio.Button>
-				<Radio.Button value='week'>Неделя</Radio.Button>
-				<Radio.Button value='day'>День</Radio.Button>
-			</Radio.Group>
+				<Radio.Group
+					size='small'
+					onChange={e => dispatch(changeView(e.target.value))}
+				>
+					<Radio.Button value='month'>Месяц</Radio.Button>
+					<Radio.Button value='week'>Неделя</Radio.Button>
+					<Radio.Button value='day'>День</Radio.Button>
+				</Radio.Group>
+			</div>
 		</div>
 	);
 };
