@@ -16,13 +16,27 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
         percents: 0,
     };
 
+    let exhibitions = 0;
+    let excursions = 0;
+
     events.forEach(event => {
         processedReport.hours += calculateTimeDifference(room.dateFrom, room.dateTo, event.dateFrom, event.dateTo);
+        if (event.type === 57) exhibitions += 1;
+        if (event.type === 58) excursions += 1;
+        // if (event.type === 57) exhibitions += 1;
+        // if (event.type === 57) exhibitions += 1;
     });
 
     processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minute') / 100) ;
+    return {
+        ...processedReport,
+        exhibitions,
+        excursions,
+    };
+}
 
-    return processedReport;
+export const BXProcesesedReportRange = (events: AppEvent[], room: AppRoom) => {
+
 }
 
 export const BXProcessedUsers = (data: BXUser[]): AppUser[] => {
@@ -64,8 +78,7 @@ export const BXProcessedRooms = (data: BXRoom[]): AppRoom[] => {
 }
 
 export const BXProcessedEvents = (data: BXEvent[]): AppEvent[] => {
-    console.log('data')
-    console.log(data)
+
     const processedEvents: AppEvent[] = data.map((item, index) => {
         return {
             id: Number(item.ID),

@@ -77,8 +77,11 @@ const ModalEventEdit = () => {
                 if (element.id === 133 && element.list) setContractType(element.list);
                 if (element.id === 134 && element.list) setPublishType(element.list);
                 if (element.id === 144 && element.list) setAgeType(element.list);
+
+
             });
         }
+
     }, [userFields]);
 
     const handleSaveEvent = () => {

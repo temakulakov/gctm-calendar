@@ -68,9 +68,14 @@ const ModalEventEdit = () => {
                 if (element.id === 133 && element.list) setContractType(element.list);
                 if (element.id === 134 && element.list) setPublishType(element.list);
                 if (element.id === 144 && element.list) setAgeType(element.list);
+
             });
+
         }
+
     }, [userFields]);
+
+
 
     const handleSaveEvent = () => {
         form.validateFields().then(values => {
@@ -147,7 +152,7 @@ const ModalEventEdit = () => {
                         <Row style={{ justifyContent: 'space-between', alignItems: 'center', margin: '10px 0' }}>
                             <Form.Item label="Используемый зал" name="rooms" style={{width: '48%'}} rules={[{ required: true, message: 'Выберите зал' }]}>
                                 <Select placeholder="Выберите зал">
-                                    {roomsData && roomsData.map(room => (
+                                    {roomsData && roomsData.filter(room => room.section === Number(form.validateFields().then(event => event.actionPlaces))).map(room => (
                                         <Select.Option key={room.id} value={room.id} title={room.title}>
                                             <Avatar style={{ backgroundColor: room.color, height: 17, width: 17, marginRight: 5, marginBottom: 4 }} />
                                             {room.title}

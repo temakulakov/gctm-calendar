@@ -21,6 +21,7 @@ import { Menu } from './Menu/Menu';
 import {holidays} from "../../../../consts";
 import {AppEvent} from "../../../../types/event";
 import {useHorizontalScroll} from "./Grid/utils";
+import EventModal from "../../../Modal/Event/EventModal";
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));
@@ -80,46 +81,49 @@ export const Day = () => {
 	});
 	const refer = useHorizontalScroll();
 	return (
-		<div className={styles.root}>
-			<AnimatePresence>
-				{holidays && (
-					<motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-						<Menu
-							builds={builds}
-							rooms={rooms}
-							events={events.filter(
-								(event: AppEvent) =>
-									event.dateFrom.isSame(currentDate, 'day') ||
-									event.dateTo.isSame(currentDate, 'day')
-							)}
-							holidays={holidays}
-							active={activeKeys}
-							setActive={setActiveKeys}
-						/>
-					</motion.div>
-				)}
+		<>
+			<div className={styles.root}>
+				<AnimatePresence>
+					{holidays && (
+						<motion.div animate={{opacity: 1}} exit={{opacity: 0}}>
+							<Menu
+								builds={builds}
+								rooms={rooms}
+								events={events.filter(
+									(event: AppEvent) =>
+										event.dateFrom.isSame(currentDate, 'day') ||
+										event.dateTo.isSame(currentDate, 'day')
+								)}
+								holidays={holidays}
+								active={activeKeys}
+								setActive={setActiveKeys}
+							/>
+						</motion.div>
+					)}
 
-				{holidays && (
-					<motion.div
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className={styles.content}
-						ref={refer}
-					>
-						<Grid
-							events={events.filter(
-								(event: AppEvent) =>
-									event.dateFrom.isSame(currentDate, 'day') ||
-									event.dateTo.isSame(currentDate, 'day')
-							)}
-							builds={builds}
-							rooms={rooms}
-							holidays={holidays}
-							active={activeKeys}
-						/>
-					</motion.div>
-				)}
-			</AnimatePresence>
-		</div>
+					{holidays && (
+						<motion.div
+							animate={{opacity: 1}}
+							exit={{opacity: 0}}
+							className={styles.content}
+							ref={refer}
+						>
+							<Grid
+								events={events.filter(
+									(event: AppEvent) =>
+										event.dateFrom.isSame(currentDate, 'day') ||
+										event.dateTo.isSame(currentDate, 'day')
+								)}
+								builds={builds}
+								rooms={rooms}
+								holidays={holidays}
+								active={activeKeys}
+							/>
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</div>
+
+		</>
 	);
 };

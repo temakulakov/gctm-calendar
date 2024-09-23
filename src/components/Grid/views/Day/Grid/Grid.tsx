@@ -3,9 +3,11 @@ import { Build, Holiday, IEvent, Room } from '../../../../../types/type';
 import styles from './Grid.module.scss';
 import { TimeLine } from './TimeLine/TimeLine';
 import { useHorizontalScroll } from './utils';
-import {useRef} from "react";
+import React, {useRef} from "react";
 import {AppEvent} from "../../../../../types/event";
 import {AppRoom} from "../../../../../types/Room";
+import EventModal from "../../../../Modal/Event/EventModal";
+import {useModalContext} from "../../../../../contexts/ModalContext";
 
 interface GridProps {
 	rooms: AppRoom[];
@@ -24,7 +26,7 @@ export const Grid = ({
 	holidays,
 	active,
 }: GridProps) => {
-
+	const { openModal } = useModalContext();
 
 	return (
 		<div>
@@ -54,18 +56,18 @@ export const Grid = ({
 											{events
 												.filter((event: AppEvent) => event.rooms === room.id)
 												.map((event: AppEvent) => {
-													// console.log(
+
 													// 	'dateFrom',
 													// 	event.dateFrom.date(1).format('DD.MM.YYYY HH:mm')
 													// );
-													// console.log(
+
 													// 	'dateTo',
 													// 	event.dateTo.date(1).format('DD.MM.YYYY HH:mm')
 													// );
 													//
-													// console.log(1900 / 24 / 60);
+
 													//
-													// console.log(
+
 													// 	event.dateTo
 													// 		.date(1)
 													// 		.diff(event.dateFrom.date(1), 'minute') *
@@ -76,6 +78,10 @@ export const Grid = ({
 														<motion.div
 															className={styles.event}
 															initial={{ opacity: 0 }}
+															onClick={(e) => {
+																e.stopPropagation()
+																openModal(event, true)
+															}}
 															animate={{
 																opacity: 1,
 																backgroundColor: room.color,
@@ -109,6 +115,7 @@ export const Grid = ({
 					);
 				})}
 			</div>
+			<EventModal/>
 		</div>
 	);
 };

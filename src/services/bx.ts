@@ -36,7 +36,7 @@ export const dayReport = async (events: AppEvent[], rooms: AppRoom[]): Promise<R
     const reports = rooms.map((item, index) => {
         return BXProcessedReportDay(events.filter(event => event.rooms === item.id), item);
     });
-    console.log(events)
+
     return reports;
 }
 
@@ -99,7 +99,7 @@ export const getEvents = async ( dateFrom: Dayjs, dateTo: Dayjs): Promise<AppEve
 
     try {
         const { data } = await axios.post<BXResponce<BXEvent>>(BXApiUrl + EventURL, params);
-        console.log(data)
+
 
         return BXProcessedEvents(data.result);
     } catch (e) {

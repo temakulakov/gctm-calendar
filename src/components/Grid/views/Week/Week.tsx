@@ -76,6 +76,8 @@ export const Week: React.FC = () => {
 									className={`${styles.weekDayNumber} ${
 										isActive ? styles.active : ''
 									}`}
+
+
 									onClick={() => selectDay(day)}
 								>
 									{day.format('D')}

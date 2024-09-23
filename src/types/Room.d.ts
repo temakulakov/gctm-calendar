@@ -12,4 +12,6 @@ export interface AppRoom {
 export interface ReportRoom extends AppRoom {
     hours: number;
     percents: number;
+    excursions: number;
+    exhibitions: number;
 }

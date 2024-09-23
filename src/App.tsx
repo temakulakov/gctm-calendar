@@ -11,10 +11,12 @@ import {useState} from "react";
 import EventModal from "./components/Modal/Event/EventModal";
 import {AppEvent} from "./types/event";
 import {useModalContext} from "./contexts/ModalContext";
+import {useQuery} from "@tanstack/react-query";
+import {getUsers} from "./services/bx";
 const { Option } = Select;
 
 function App() {
-
+	const { data: users } = useQuery({ queryKey: ['users'], queryFn: getUsers });
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
 	const handleChange = (value: number[]) => {
