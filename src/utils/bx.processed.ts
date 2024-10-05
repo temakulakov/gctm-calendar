@@ -21,6 +21,12 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
 
     events.forEach(event => {
         processedReport.hours += calculateTimeDifference(room.dateFrom, room.dateTo, event.dateFrom, event.dateTo);
+        console.log('------------------------------')
+        console.log('room.dateFrom' + room.dateFrom)
+        console.log('room.dateTo' + room.dateTo)
+        console.log('------------------------------')
+        console.log('event.dateFrom' + event.dateFrom)
+        console.log('event.dateTo' + event.dateTo)
         if (event.type === 57) exhibitions += 1;
         if (event.type === 58) excursions += 1;
         // if (event.type === 57) exhibitions += 1;

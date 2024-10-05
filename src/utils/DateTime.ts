@@ -27,6 +27,9 @@ export const calculateTimeDifference = (startInterval: Dayjs, endInterval: Dayjs
     } else {
         // Если интервал некорректен (начало позже конца)
         console.log('Интервал некорректен: конец интервала раньше или совпадает с началом');
+        console.log(adjustedEnd);
+        console.log(adjustedStart);
+
         return 0;
     }
 };
