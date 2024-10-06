@@ -112,6 +112,8 @@ const ModalEventEdit = () => {
         }
     };
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Modal
             width={1000}
@@ -121,6 +123,9 @@ const ModalEventEdit = () => {
             footer={[
                 <Button key="cancel" onClick={closeModal}>
                     Отмена
+                </Button>,
+                <Button key="cancel" href={`https://intranet.bakhrushinmuseum.ru/crm/deal/details/${event !== null ? event.id : ''}`}>
+                    Перейти в CRM
                 </Button>,
                 <Button key="delete" danger onClick={handleDeleteEvent}>
                     Удалить

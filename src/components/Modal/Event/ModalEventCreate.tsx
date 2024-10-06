@@ -78,13 +78,13 @@ const ModalEventEdit = () => {
 
 
     const handleSaveEvent = () => {
-        form.validateFields().then(values => {
+        form.validateFields().then((values) => {
             const updatedEvent: AppEvent = {
                 id: event ? event.id : 0,
                 ...values,
-                duration: `${dayjs(values.dateTo).diff(dayjs(values.dateFrom), 'hour')} часов ${dayjs(values.dateTo).diff(dayjs(values.dateFrom), 'minute') % 60} минут`,
-                dateFrom: values.dateFrom || dayjs(),
-                dateTo: values.dateTo || dayjs(),
+                duration: `${dayjs(values.dateRange[1]).diff(dayjs(values.dateRange[0]), 'hour')} часов ${dayjs(values.dateRange[1]).diff(dayjs(values.dateRange[0]), 'minute') % 60} минут`,
+                dateFrom: values.dateRange[0] || dayjs(),
+                dateTo: values.dateRange[1] || dayjs(),
                 assignedById: event ? event.assignedById : 0,
                 contactFullName: event ? event.eventDetails : '',
                 eventDetails: event ? event.eventDetails : '',
@@ -115,7 +115,25 @@ const ModalEventEdit = () => {
                 </Button>,
             ]}
         >
-            <Form form={form} layout="vertical">
+            <Form form={form}
+                  layout="vertical"
+                  validateTrigger="onSubmit"
+                  initialValues={{
+                      title: '',
+                      dateRange: [],
+                      responsibleStaffList: [],
+                      ages: [],
+                      rooms: '',
+                      actionPlaces: '',
+                      seatsCount: 0,
+                      published: [],
+                      contractType: '',
+                      requisites: '',
+                      comments: '',
+                      type: '',
+                      technicalSupportRequired: false,
+                      techSupportNeeds: '',
+                  }}>
                 <Row gutter={24}>
                     <Col span={12}>
                         <Form.Item label="Название мероприятия" name="title" rules={[{ required: true, message: 'Введите заголовок' }]}>

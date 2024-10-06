@@ -27,6 +27,7 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
         console.log('------------------------------')
         console.log('event.dateFrom' + event.dateFrom)
         console.log('event.dateTo' + event.dateTo)
+
         if (event.type === 57) exhibitions += 1;
         if (event.type === 58) excursions += 1;
         // if (event.type === 57) exhibitions += 1;
