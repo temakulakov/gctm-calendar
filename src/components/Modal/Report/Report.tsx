@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Button, Modal, DatePicker, Table, TableColumnsType } from 'antd';
+import {Button, Modal, DatePicker, Table, TableColumnsType, ConfigProvider} from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import * as XLSX from 'xlsx'; // Импортируем библиотеку xlsx
+import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
 import { useQuery } from "@tanstack/react-query";
 import { AppEvent } from "../../../types/event";
 import { getBuilds, getEvents, getRooms } from "../../../services/bx";
 import { Build, Room } from "../../../types/type";
 import { ReportRoom } from '../../../types/Room';
-import {BXProcesesedReportRange, BXProcessedReportDay} from "../../../utils/bx.processed";
+import { BXProcesesedReportRange } from "../../../utils/bx.processed";
+import  "dayjs/locale/ru";
+import ruLocale from 'antd/lib/locale/ru_RU';
+
+import { Bar } from 'react-chartjs-2';
+import {Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartData} from 'chart.js';
+
+// Регистрация компонентов Chart.js
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+// Устанавливаем русскую локализацию для dayjs
+dayjs.locale('ru');
 
 const { RangePicker } = DatePicker;
 
@@ -55,28 +66,59 @@ const ReportButton = () => {
         if (dates) {
             setDateRange(dates);
         } else {
-            setDateRange([null, null]); // Сбрасываем, если dates равен null
+            setDateRange([null, null]);
         }
-
     };
 
-    // Столбцы для отчета по комнатам (ReportRoom)
+    // Столбцы для отчета по комнатам
     const roomColumns: TableColumnsType<ReportRoom> = [
-        { title: 'Места проведения', dataIndex: 'title', key: 'title' },
-        { title: 'Количество часов', dataIndex: 'hours', key: 'hours' },
-        { title: 'Процент занятости', dataIndex: 'percents', key: 'percents', render: (percents) => `${percents}%` },
-        { title: 'Экскурсии', dataIndex: 'excursions', key: 'excursions' },
-        { title: 'Выставки', dataIndex: 'exhibitions', key: 'exhibitions' },
+        { title: 'Места проведения', dataIndex: 'title', key: 'title', align: 'left', width: 200 },
+        { title: 'Количество часов', dataIndex: 'hours', key: 'hours', align: 'right', width: 150 },
+        { title: 'Процент занятости', dataIndex: 'percents', key: 'percents', align: 'right', width: 150, render: (percents) => `${percents}%` },
+        { title: 'Экскурсии', dataIndex: 'excursions', key: 'excursions', align: 'right', width: 150 },
+        { title: 'Выставки', dataIndex: 'exhibitions', key: 'exhibitions', align: 'right', width: 150 },
     ];
 
-    // Преобразуем комнаты в ReportRoom с агрегированными данными
-    const reportData: ReportRoom[] = rooms.map((room) =>
-        BXProcesesedReportRange(events.filter((event) => event.rooms === room.id), room, dateRange[0] !== null ? dateRange[0] : dayjs(), dateRange[1] !== null ? dateRange[1] : dayjs())
+    const getChartData = () => {
+        if (!buildsWithAggregatedData) return null;
 
-        // BXProcessedReportDay(events.filter((event) => event.rooms === room.id), room)
+        const labels = buildsWithAggregatedData.map(build => build.title);
+        const totalHours = buildsWithAggregatedData.map(build => build.totalHours);
+        const totalExcursions = buildsWithAggregatedData.map(build => build.totalExcursions);
+        const totalExhibitions = buildsWithAggregatedData.map(build => build.totalExhibitions);
+
+        return {
+            labels,
+            datasets: [
+                {
+                    label: 'Количество часов',
+                    data: totalHours,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                },
+                {
+                    label: 'Экскурсии',
+                    data: totalExcursions,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                },
+                {
+                    label: 'Выставки',
+                    data: totalExhibitions,
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                },
+            ],
+        };
+    };
+
+
+    const reportData: ReportRoom[] = rooms.map((room) =>
+        BXProcesesedReportRange(
+            events.filter((event) => event.rooms === room.id),
+            room,
+            dateRange[0] !== null ? dateRange[0] : dayjs(),
+            dateRange[1] !== null ? dateRange[1] : dayjs()
+        )
     );
 
-    // Функция для вычисления суммы и среднего по дочерним комнатам для здания
     const getAggregatedDataForBuild = (buildId: number) => {
         const relatedRooms = reportData.filter(room => room.section === buildId);
 
@@ -96,7 +138,6 @@ const ReportButton = () => {
         };
     };
 
-    // Агрегированные данные для каждого здания
     const buildsWithAggregatedData = builds?.map((build) => {
         const aggregatedData = getAggregatedDataForBuild(build.id);
         return {
@@ -105,26 +146,23 @@ const ReportButton = () => {
             totalExcursions: aggregatedData.totalExcursions,
             totalExhibitions: aggregatedData.totalExhibitions,
             averageOccupancy: aggregatedData.averageOccupancy,
-            relatedRooms: aggregatedData.relatedRooms // Добавляем комнаты, чтобы отображать их при развертывании
+            relatedRooms: aggregatedData.relatedRooms
         };
     });
 
-    // Столбцы для отчетов по зданиям (Build), включая агрегированные данные
+    // Столбцы для отчетов по зданиям
     const buildColumns: TableColumnsType<Build & { totalHours: number; averageOccupancy: number; totalExcursions: number; totalExhibitions: number; relatedRooms: ReportRoom[]; }> = [
-        { title: 'Здание', dataIndex: 'title', key: 'title' },
-        { title: 'Количество часов (сумма)', dataIndex: 'totalHours', key: 'totalHours' },
-        { title: 'Процент занятости (среднее)', dataIndex: 'averageOccupancy', key: 'averageOccupancy', render: (value) => `${value}%` },
-        { title: 'Экскурсии (сумма)', dataIndex: 'totalExcursions', key: 'totalExcursions' },
-        { title: 'Выставки (сумма)', dataIndex: 'totalExhibitions', key: 'totalExhibitions' },
+        { title: 'Здание', dataIndex: 'title', key: 'title', align: 'left', width: 200 },
+        { title: 'Количество часов (сумма)', dataIndex: 'totalHours', key: 'totalHours', align: 'right', width: 150 },
+        { title: 'Процент занятости (среднее)', dataIndex: 'averageOccupancy', key: 'averageOccupancy', align: 'right', width: 150, render: (value) => `${value}%` },
+        { title: 'Экскурсии (сумма)', dataIndex: 'totalExcursions', key: 'totalExcursions', align: 'right', width: 150 },
+        { title: 'Выставки (сумма)', dataIndex: 'totalExhibitions', key: 'totalExhibitions', align: 'right', width: 150 },
     ];
 
-    // Функция для скачивания таблицы в формате Excel с сохранением структуры
     const downloadExcel = () => {
         const worksheetData: Array<any> = [];
 
-        // Проходим по каждому зданию и добавляем его и его залы
         buildsWithAggregatedData?.forEach(build => {
-            // Добавляем данные о здании
             worksheetData.push({
                 'Здание': build.title,
                 'Количество часов': build.totalHours,
@@ -133,10 +171,9 @@ const ReportButton = () => {
                 'Выставки': build.totalExhibitions
             });
 
-            // Добавляем данные о залах, относящихся к зданию
             build.relatedRooms.forEach(room => {
                 worksheetData.push({
-                    'Здание': `   - ${room.title}`, // Добавляем небольшой отступ для обозначения зала
+                    'Здание': `   - ${room.title}`,
                     'Количество часов': room.hours,
                     'Процент занятости': `${room.percents}%`,
                     'Экскурсии': room.excursions,
@@ -145,10 +182,10 @@ const ReportButton = () => {
             });
         });
 
-        const ws = XLSX.utils.json_to_sheet(worksheetData); // Преобразуем данные в формат Excel
+        const ws = XLSX.utils.json_to_sheet(worksheetData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Отчет');
-        XLSX.writeFile(wb, 'отчет_мероприятий.xlsx'); // Сохраняем файл
+        XLSX.writeFile(wb, 'отчет_мероприятий.xlsx');
     };
 
     return (
@@ -164,12 +201,14 @@ const ReportButton = () => {
                 width="90%"
                 bodyStyle={{ height: '90vh' }}
             >
+                <ConfigProvider locale={ruLocale}>
                 <RangePicker
                     style={{ width: '100%' }}
                     onChange={onDateChange}
                     value={dateRange}
                     placeholder={['Начальная дата', 'Конечная дата']}
                 />
+                </ConfigProvider>
                 {
                     dateRange[0] && dateRange[1] && (
                         <>
@@ -192,6 +231,7 @@ const ReportButton = () => {
                                                         dataSource={build.relatedRooms}
                                                         pagination={false}
                                                         rowKey="id"
+                                                        style={{ marginLeft: '20px' }} // Отступ для вложенных строк
                                                     />
                                                 );
                                             },
@@ -203,6 +243,34 @@ const ReportButton = () => {
                                     />
                                 )
                             }
+
+                            {
+                                events && rooms && buildsWithAggregatedData && (
+                                    <>
+                                        {getChartData() ? (
+                                            <Bar
+                                                data={getChartData() as ChartData<"bar", number[], string>} // Приведение типов, если вы уверены, что данные есть
+                                                options={{
+                                                    indexAxis: 'y',
+                                                    responsive: true,
+                                                    plugins: {
+                                                        legend: {
+                                                            position: 'right',
+                                                        },
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Анализ по зданиям',
+                                                        },
+                                                    },
+                                                }}
+                                            />
+                                        ) : (
+                                            <p>Нет данных для отображения графика.</p>
+                                        )}
+                                    </>
+                                )
+                            }
+
                         </>
                     )
                 }

@@ -28,7 +28,7 @@ export const calculateTimeDifference = (startInterval: Dayjs, endInterval: Dayjs
     // Проверяем, что конец периода позже его начала
     if (adjustedEnd.isAfter(adjustedStart)) {
         // Рассчитываем разницу в минутах между скорректированными началом и концом
-        return adjustedEnd.diff(adjustedStart, 'hours');
+        return adjustedEnd.diff(adjustedStart, 'minutes');
     } else {
         // Если интервал некорректен (начало позже конца)
         console.log('Интервал некорректен: конец интервала раньше или совпадает с началом');

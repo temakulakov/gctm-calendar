@@ -35,6 +35,7 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
     });
 
     processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minutes') / 100) ;
+    console.log(processedReport);
     return {
         ...processedReport,
         exhibitions,
@@ -75,9 +76,10 @@ export const BXProcesesedReportRange = (events: AppEvent[], room: AppRoom, dateS
         // if (event.type === 57) exhibitions += 1;
     });
 
-    processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'hours') / 100) ;
+    processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minutes') * dateStop.diff(dateStart, 'days') / 100) ;
     return {
         ...processedReport,
+        hours: processedReport.hours / 60,
         exhibitions,
         excursions,
     };

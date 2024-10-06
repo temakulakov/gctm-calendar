@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, {useEffect, useState} from 'react';
 import { useAppSelector } from '../../../../../app/hook';
-import { BXProcessedReportDay } from '../../../../../utils/bx.processed';
 import { Build, Holiday, Room } from '../../../../../types/type';
 import { LineLoad } from '../LineLoad/LineLoad';
 import styles from './Menu.module.scss';
