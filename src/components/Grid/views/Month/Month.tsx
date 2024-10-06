@@ -113,7 +113,7 @@ export const Month = () => {
 								date.month() !== currentDate.month() ? styles.otherMonth : ''
 							}`}
 							onClick={() => {
-								openModal(date, true)
+								// openModal(date, true)
 							}}
 						>
 							<div

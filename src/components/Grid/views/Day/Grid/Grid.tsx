@@ -79,8 +79,8 @@ export const Grid = ({
 															className={styles.event}
 															initial={{ opacity: 0 }}
 															onClick={(e) => {
-																e.stopPropagation()
-																openModal(event, true)
+																// e.stopPropagation()
+																// openModal(event, true)
 															}}
 															animate={{
 																opacity: 1,

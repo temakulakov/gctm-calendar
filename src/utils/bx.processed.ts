@@ -1,5 +1,5 @@
 import {AppEvent} from "../types/event";
-import dayjs from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 import {AppRoom, ReportRoom} from "../types/Room";
 import {alignToSameDay, calculateTimeDifference} from "./DateTime";
 
@@ -34,7 +34,7 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
         // if (event.type === 57) exhibitions += 1;
     });
 
-    processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minute') / 100) ;
+    processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minutes') / 100) ;
     return {
         ...processedReport,
         exhibitions,
@@ -42,8 +42,45 @@ export const BXProcessedReportDay = (events: AppEvent[], room: AppRoom): ReportR
     };
 }
 
-export const BXProcesesedReportRange = (events: AppEvent[], room: AppRoom) => {
 
+
+
+export const BXProcesesedReportRange = (events: AppEvent[], room: AppRoom, dateStart: Dayjs, dateStop: Dayjs) => {
+    const processedReport = {
+        id: room.id,
+        title: room.title,
+        color: room.color,
+        section: room.section,
+        dateFrom: room.dateFrom,
+        dateTo: room.dateTo,
+        hours: 0,
+        percents: 0,
+    };
+
+    let exhibitions = 0;
+    let excursions = 0;
+
+    events.forEach(event => {
+        processedReport.hours += calculateTimeDifference(room.dateFrom, room.dateTo, event.dateFrom, event.dateTo);
+        console.log('------------------------------')
+        console.log('room.dateFrom' + room.dateFrom)
+        console.log('room.dateTo' + room.dateTo)
+        console.log('------------------------------')
+        console.log('event.dateFrom' + event.dateFrom)
+        console.log('event.dateTo' + event.dateTo)
+
+        if (event.type === 57) exhibitions += 1;
+        if (event.type === 58) excursions += 1;
+        // if (event.type === 57) exhibitions += 1;
+        // if (event.type === 57) exhibitions += 1;
+    });
+
+    processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'hours') / 100) ;
+    return {
+        ...processedReport,
+        exhibitions,
+        excursions,
+    };
 }
 
 export const BXProcessedUsers = (data: BXUser[]): AppUser[] => {

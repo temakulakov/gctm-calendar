@@ -8,7 +8,7 @@ import { AppEvent } from "../../../types/event";
 import { getBuilds, getEvents, getRooms } from "../../../services/bx";
 import { Build, Room } from "../../../types/type";
 import { ReportRoom } from '../../../types/Room';
-import { BXProcessedReportDay } from "../../../utils/bx.processed";
+import {BXProcesesedReportRange, BXProcessedReportDay} from "../../../utils/bx.processed";
 
 const { RangePicker } = DatePicker;
 
@@ -71,7 +71,9 @@ const ReportButton = () => {
 
     // Преобразуем комнаты в ReportRoom с агрегированными данными
     const reportData: ReportRoom[] = rooms.map((room) =>
-        BXProcessedReportDay(events.filter((event) => event.rooms === room.id), room)
+        BXProcesesedReportRange(events.filter((event) => event.rooms === room.id), room, dateRange[0] !== null ? dateRange[0] : dayjs(), dateRange[1] !== null ? dateRange[1] : dayjs())
+
+        // BXProcessedReportDay(events.filter((event) => event.rooms === room.id), room)
     );
 
     // Функция для вычисления суммы и среднего по дочерним комнатам для здания

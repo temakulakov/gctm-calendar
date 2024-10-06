@@ -21,7 +21,7 @@ import { Menu } from './Menu/Menu';
 import {holidays} from "../../../../consts";
 import {AppEvent} from "../../../../types/event";
 import {useHorizontalScroll} from "./Grid/utils";
-import EventModal from "../../../Modal/Event/EventModal";
+
 
 export const Day = () => {
 	const currentDate = dayjs(useAppSelector(state => state.date.value));

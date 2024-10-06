@@ -121,10 +121,10 @@ const ModalEventEdit = () => {
             visible={true}
             onCancel={closeModal}
             footer={[
-                <Button key="cancel" onClick={closeModal}>
-                    Отмена
-                </Button>,
-                <Button key="cancel" href={`https://intranet.bakhrushinmuseum.ru/crm/deal/details/${event !== null ? event.id : ''}`}>
+                // <Button key="cancel" onClick={closeModal}>
+                //     Отмена
+                // </Button>,
+                <Button key="cancel"  target="_blank" href={`https://intranet.bakhrushinmuseum.ru/crm/deal/details/${event !== null ? event.id : ''}/`}>
                     Перейти в CRM
                 </Button>,
                 <Button key="delete" danger onClick={handleDeleteEvent}>
