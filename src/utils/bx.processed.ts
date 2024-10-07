@@ -79,10 +79,16 @@ export const BXProcesesedReportRange = (events: AppEvent[], room: AppRoom, dateS
     processedReport.percents =  processedReport.hours / (alignToSameDay(room.dateTo).diff(alignToSameDay(room.dateFrom), 'minutes') * dateStop.diff(dateStart, 'days') / 100) ;
     return {
         ...processedReport,
-        hours: processedReport.hours / 60,
+        percents: roundUp(processedReport.percents, 1),
+        hours: roundUp(processedReport.hours / 60, 1),
         exhibitions,
         excursions,
     };
+}
+
+function roundUp(num: number, precision: number) {
+    precision = Math.pow(10, precision)
+    return Math.ceil(num * precision) / precision
 }
 
 export const BXProcessedUsers = (data: BXUser[]): AppUser[] => {
