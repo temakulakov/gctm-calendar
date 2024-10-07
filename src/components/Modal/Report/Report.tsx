@@ -199,7 +199,7 @@ const ReportButton = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 width="90%"
-                bodyStyle={{ height: '90vh' }}
+                style={{ maxHeight: '80vh', overflowY: 'scroll',  height: 'fit-content', paddingBottom: 20}}
             >
                 <ConfigProvider locale={ruLocale}>
                 <RangePicker
@@ -214,7 +214,7 @@ const ReportButton = () => {
                         <>
                             <Button
                                 icon={<DownloadOutlined />}
-                                style={{ marginBottom: 16 }}
+                                style={{ marginBottom: 16, marginTop: 16 }}
                                 onClick={downloadExcel}
                             >
                                 Скачать отчет
@@ -245,30 +245,30 @@ const ReportButton = () => {
                             }
 
                             {
-                                events && rooms && buildsWithAggregatedData && (
-                                    <>
-                                        {getChartData() ? (
-                                            <Bar
-                                                data={getChartData() as ChartData<"bar", number[], string>} // Приведение типов, если вы уверены, что данные есть
-                                                options={{
-                                                    indexAxis: 'y',
-                                                    responsive: true,
-                                                    plugins: {
-                                                        legend: {
-                                                            position: 'right',
-                                                        },
-                                                        title: {
-                                                            display: true,
-                                                            text: 'Анализ по зданиям',
-                                                        },
-                                                    },
-                                                }}
-                                            />
-                                        ) : (
-                                            <p>Нет данных для отображения графика.</p>
-                                        )}
-                                    </>
-                                )
+                                // events && rooms && buildsWithAggregatedData && (
+                                //     <>
+                                //         {getChartData() ? (
+                                //             <Bar
+                                //                 data={getChartData() as ChartData<"bar", number[], string>} // Приведение типов, если вы уверены, что данные есть
+                                //                 options={{
+                                //                     indexAxis: 'y',
+                                //                     responsive: true,
+                                //                     plugins: {
+                                //                         legend: {
+                                //                             position: 'right',
+                                //                         },
+                                //                         title: {
+                                //                             display: true,
+                                //                             text: 'Анализ по зданиям',
+                                //                         },
+                                //                     },
+                                //                 }}
+                                //             />
+                                //         ) : (
+                                //             <p>Нет данных для отображения графика.</p>
+                                //         )}
+                                //     </>
+                                // )
                             }
 
                         </>
