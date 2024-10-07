@@ -87,7 +87,7 @@ export const Grid = ({
 															animate={{
 																opacity: 1,
 																cursor: 'pointer',
-																zIndex: 9999,
+																// zIndex: 9999,
 																backgroundColor: room.color,
 																width:
 																	event.dateTo

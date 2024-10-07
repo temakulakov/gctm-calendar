@@ -21,10 +21,10 @@
 
 .event {
 	height: 80%;
-	z-index: 9999999;
+	z-index: 99999999;
 	width: fit-content;
 	border-radius: 5px;
-	position: absolute;
+	//position: absolute;
 	color: white;
 	font-size: 12px;
 	flex-direction: column;
@@ -34,6 +34,8 @@
 	// align-items: center;
 	padding-left: 3px;
 	p {
+		z-index: 999899;
+
 		display: -webkit-box;
 		-webkit-line-clamp: 1; /* Количество строк */
 		-webkit-box-orient: vertical;
