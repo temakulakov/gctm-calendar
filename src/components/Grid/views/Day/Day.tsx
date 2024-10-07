@@ -21,6 +21,8 @@ import { Menu } from './Menu/Menu';
 import {holidays} from "../../../../consts";
 import {AppEvent} from "../../../../types/event";
 import {useHorizontalScroll} from "./Grid/utils";
+import EventModal from "../../../Modal/Event/EventModal";
+import {useModalContext} from "../../../../contexts/ModalContext";
 
 
 export const Day = () => {
@@ -31,6 +33,8 @@ export const Day = () => {
 		queryFn: () => getRooms(),
 		initialData: [],
 	});
+
+	const { openModal } = useModalContext();
 
 	const { data: builds } = useQuery<Build[]>({
 		queryKey: ['build'],
@@ -123,7 +127,6 @@ export const Day = () => {
 					)}
 				</AnimatePresence>
 			</div>
-
 		</>
 	);
 };

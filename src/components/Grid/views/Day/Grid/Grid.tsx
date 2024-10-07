@@ -80,10 +80,14 @@ export const Grid = ({
 															initial={{ opacity: 0 }}
 															onClick={(e) => {
 																// e.stopPropagation()
-																// openModal(event, true)
+																e.preventDefault();
+																console.log('Ну нажал')
+																openModal(event, true)
 															}}
 															animate={{
 																opacity: 1,
+																cursor: 'pointer',
+																zIndex: 9999,
 																backgroundColor: room.color,
 																width:
 																	event.dateTo
