@@ -76,9 +76,9 @@ export const Header = () => {
 	};
 
 	// Используем хук для обработки нажатий клавиш
-	useKeyPress(['w', 'ц'], () => dispatch(changeView('week')));
-	useKeyPress(['m', 'ь'], () => dispatch(changeView('month')));
-	useKeyPress(['d', 'в'], () => dispatch(changeView('day')));
+	// useKeyPress(['w', 'ц'], () => dispatch(changeView('week')));
+	// useKeyPress(['m', 'ь'], () => dispatch(changeView('month')));
+	// useKeyPress(['d', 'в'], () => dispatch(changeView('day')));
 
 	return (
 		<div className={styles.root}>
