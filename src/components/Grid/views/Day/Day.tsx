@@ -96,6 +96,7 @@ export const Day = () => {
 				<AnimatePresence>
 					{holidays && (
 						<motion.div animate={{opacity: 1}} exit={{opacity: 0}}>
+
 							<Menu
 								builds={builds}
 								rooms={rooms}
