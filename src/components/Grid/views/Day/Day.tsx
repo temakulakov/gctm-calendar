@@ -91,6 +91,7 @@ export const Day = () => {
 	}, []);
 	return (
 		<>
+
 			<div className={styles.root}>
 				<AnimatePresence>
 					{holidays && (
