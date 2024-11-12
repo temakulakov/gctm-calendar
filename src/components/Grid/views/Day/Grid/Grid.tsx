@@ -3,7 +3,7 @@ import { Build, Holiday, IEvent, Room } from '../../../../../types/type';
 import styles from './Grid.module.scss';
 import { TimeLine } from './TimeLine/TimeLine';
 import { useHorizontalScroll } from './utils';
-import React, {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import {AppEvent} from "../../../../../types/event";
 import {AppRoom} from "../../../../../types/Room";
 import EventModal from "../../../../Modal/Event/EventModal";
@@ -27,6 +27,11 @@ export const Grid = ({
 	active,
 }: GridProps) => {
 	const { openModal } = useModalContext();
+	const gridRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		console.log(gridRef);
+	}, [])
 
 	return (
 		<div>
@@ -76,6 +81,7 @@ export const Grid = ({
 
 													return (
 														<motion.div
+															ref={gridRef}
 															className={styles.event}
 															initial={{ opacity: 0 }}
 															onClick={(e) => {

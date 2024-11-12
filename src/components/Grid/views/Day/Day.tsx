@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hook';
 
 import {
@@ -84,6 +84,11 @@ export const Day = () => {
 		initialData: [],
 	});
 	const refer = useHorizontalScroll();
+	useEffect(() => {
+		console.log('refer')
+		console.log(refer)
+		refer.current?.scrollBy(1920 / 24 * dayjs().hour(), 0);
+	}, []);
 	return (
 		<>
 			<div className={styles.root}>

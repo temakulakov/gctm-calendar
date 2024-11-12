@@ -30,19 +30,6 @@ function App() {
 
 	return (
 		<div className={styles.root}>
-			{/*<Button type="primary" onClick={() => openModal(null, true)}>*/}
-			{/*	Создать событие*/}
-			{/*</Button>*/}
-			{/*<Button type="default" onClick={() => openModal(sampleEvent, true)}>*/}
-			{/*	Редактировать событие*/}
-			{/*</Button>*/}
-			{/*<Button type="default" onClick={() => openModal(sampleEvent, false)}>*/}
-			{/*	Просмотреть событие*/}
-			{/*</Button>*/}
-
-			{/*<EventModal />*/}
-
-
 			<div className={styles.content}>
 				<Header />
 				<Grid />
