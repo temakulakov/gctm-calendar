@@ -9,6 +9,7 @@ import { store } from './app/store';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {ModalProvider} from "./contexts/ModalContext";
+import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -18,6 +19,7 @@ const queryClient = new QueryClient();
 
 root.render(
 	<React.StrictMode>
+		<BrowserRouter>
 		<Provider store={store}>
 			<QueryClientProvider client={queryClient}>
 				<ConfigProvider
@@ -45,6 +47,7 @@ root.render(
 				</ConfigProvider>
 			</QueryClientProvider>
 		</Provider>
+		</BrowserRouter>
 	</React.StrictMode>
 );
 
