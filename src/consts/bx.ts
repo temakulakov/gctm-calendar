@@ -58,7 +58,7 @@ export const EventDeleteURL = "crm.deal.delete";
 
 export const UserURL = "user.get";
 
-export const BXApiUrl = "https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/";
+export const BXApiUrl = "https://intranet.bakhrushinmuseum.ru/rest/1/e3stpev74xjsn8m2/";
 
 export type BXRequestEventSelectType = typeof BXRequestEventSelect[number];
 export type BXApiUrlType = typeof BXApiUrl;
