@@ -21,7 +21,7 @@ import {AppRoom, ReportRoom} from "../types/Room";
 import {UserField} from "../types/type";
 
 export const getFields = async (): Promise<UserField[]> => {
-    const { data } = await axios.get<{ result: BXUserField[] }>('https://intranet.bakhrushinmuseum.ru/rest/3/ynm1gnbjjm2kf4vk/crm.deal.userfield.list');
+    const { data } = await axios.get<{ result: BXUserField[] }>('https://intranet.bakhrushinmuseum.ru/rest/1/e3stpev74xjsn8m2/crm.deal.userfield.list');
     return data.result.map(field => ({
         id: parseInt(field.ID),
         title: field.FIELD_NAME,
